@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MindustryLauncher", "MindustryLauncher\MindustryLauncher.csproj", "{BAA1DFF2-43AC-47C4-9B3E-8814F19A655D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessStarter", "ProcessStarter\ProcessStarter.csproj", "{08407B5C-5DB2-4F90-AD14-E2274CC91740}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Process", "Process\Process.csproj", "{51CFD4C9-A4EA-4427-9C7A-762D03893591}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BAA1DFF2-43AC-47C4-9B3E-8814F19A655D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAA1DFF2-43AC-47C4-9B3E-8814F19A655D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAA1DFF2-43AC-47C4-9B3E-8814F19A655D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAA1DFF2-43AC-47C4-9B3E-8814F19A655D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08407B5C-5DB2-4F90-AD14-E2274CC91740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08407B5C-5DB2-4F90-AD14-E2274CC91740}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08407B5C-5DB2-4F90-AD14-E2274CC91740}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08407B5C-5DB2-4F90-AD14-E2274CC91740}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51CFD4C9-A4EA-4427-9C7A-762D03893591}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51CFD4C9-A4EA-4427-9C7A-762D03893591}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51CFD4C9-A4EA-4427-9C7A-762D03893591}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51CFD4C9-A4EA-4427-9C7A-762D03893591}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
