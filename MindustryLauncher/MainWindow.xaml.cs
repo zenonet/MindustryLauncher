@@ -29,6 +29,12 @@ namespace MindustryLauncher
             RunButton.Click += RunCurrentInstance;
             DeleteInstanceButton.Click += DeleteInstance;
             AddInstanceButton.Click += AddInstance;
+            OpenMindustryFolderButton.Click += OpenMindustryFolder;
+        }
+
+        private void OpenMindustryFolder(object sender, RoutedEventArgs e)
+        {
+            Process.Start("explorer.exe", Path.Join(SelectedInstance!.Path, "Mindustry"));
         }
 
         private void DeleteInstance(object sender, RoutedEventArgs e)
