@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-
 using System.Windows.Media.Imaging;
-
 using Path = System.IO.Path;
 
 namespace MindustryLauncher
@@ -13,10 +12,32 @@ namespace MindustryLauncher
     /// </summary>
     public partial class MainWindow : Window
     {
-        public Instance? SelectedInstance;
+        private Instance selectedInstance;
+
+        public Instance? SelectedInstance
+        {
+            get
+            {
+                if (InstanceManager.Instances.Contains(selectedInstance))
+                    return selectedInstance;
+
+                if (InstanceManager.Instances.Count <= 0)
+                    return null;
+
+                selectedInstance = InstanceManager.Instances[0];
+                return selectedInstance;
+            }
+            set
+            {
+                if (value == null)
+                    selectedInstance = InstanceManager.Instances[(InstanceManager.Instances.IndexOf(selectedInstance) + 1) % InstanceManager.Instances.Count];
+                else
+                    selectedInstance = value;
+            }
+        }
 
         public static MainWindow MainWindowInstance = null!;
-        
+
         public MainWindow()
         {
             MainWindowInstance = this;
