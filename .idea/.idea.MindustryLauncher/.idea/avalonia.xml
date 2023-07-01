@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="AvaloniaApplication1/MainWindow.axaml" value="AvaloniaApplication1/AvaloniaApplication1.csproj" />
+        <entry key="MindustryLauncher.Avalonia/App.axaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.csproj" />
+        <entry key="MindustryLauncher.Avalonia/InstanceListBoxItem.axaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.csproj" />
+        <entry key="MindustryLauncher.Avalonia/InstanceListViewItem.xaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.csproj" />
+        <entry key="MindustryLauncher.Avalonia/MainWindow.axaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.csproj" />
+        <entry key="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia/App.axaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.Browser/MindustryLauncher.Avalonia.Browser.csproj" />
+        <entry key="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia/Views/MainView.axaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.Browser/MindustryLauncher.Avalonia.Browser.csproj" />
+        <entry key="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia/Views/MainWindow.axaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.Browser/MindustryLauncher.Avalonia.Browser.csproj" />
+        <entry key="MindustryLauncher.Avalonia/MindustryLauncherStyles.axaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.csproj" />
+        <entry key="MindustryLauncher.Avalonia/NewInstanceWindow.axaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.csproj" />
+        <entry key="MindustryLauncher.Avalonia/NewInstanceWindow.xaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MindustryLauncher"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
@@ -19,12 +18,13 @@
         </Grid.RowDefinitions>
         <ListView Name="InstanceList">
         </ListView>
-        <StackPanel Name="InstanceOptionsStackPanel" Grid.Column="1" Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Right">
+        <StackPanel Name="InstanceOptionsStackPanel" Grid.Column="1" Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Center">
             <Image Name="InstanceIconLarge" Height="100" Width="100"></Image>
             <TextBlock TextAlignment="Center" FontSize="15" Name="InstanceName">Main</TextBlock>
             <TextBlock TextAlignment="Center" FontSize="12" Name="InstanceVersion">145.1</TextBlock>
-            <Button Name="RunButton" Margin="10" Height="25" Width="50" ToolTip="Run the selected instance">Run</Button>
-            <Button Name="DeleteInstanceButton" Margin="10" Height="25" Width="50" ToolTip="Delete the selected instance">Delete</Button>
+            <Button Style="{StaticResource ButtonStyle}" Name="RunButton" ToolTip="Run the selected instance">Run</Button>
+            <Button Style="{StaticResource ButtonStyle}" Name="OpenMindustryFolderButton" ToolTip="Run the selected instance">Mindustry folder</Button>
+            <Button Style="{StaticResource ButtonStyle}" Name="DeleteInstanceButton" ToolTip="Delete the selected instance">Delete</Button>
         </StackPanel>
         
         <Button Name="AddInstanceButton" Grid.Column="0" Grid.Row="1" Margin="10" Width="75" HorizontalAlignment="Left">Add Instance</Button>

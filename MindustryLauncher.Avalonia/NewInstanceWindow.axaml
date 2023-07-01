@@ -1,0 +1,21 @@
+﻿<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Create new Instance" Height="450" Width="800"
+    x:Class="MindustryLauncher.Avalonia.NewInstanceWindow">
+    <Grid>
+        <StackPanel Margin="50">
+            <StackPanel Orientation="Horizontal">
+                <Label HorizontalAlignment="Left">Instance Name:</Label>
+                <Label Name="InstanceNameErrorMessage" HorizontalAlignment="Left" Foreground="Red"></Label>
+            </StackPanel>
+            <TextBox Name="InstanceName" Width="200" Height="20" HorizontalAlignment="Left" />
+            <Label HorizontalAlignment="Left" Margin="0, 20, 0, 0">Version:</Label>
+            <ComboBox Name="VersionDropDown" Width="200" HorizontalAlignment="Left" />
+            <Button Name="CreateButton" Margin="0, 20, 0, 0" Width="75" HorizontalAlignment="Left" HorizontalContentAlignment="Center">Create</Button>
+        </StackPanel>
+    </Grid>
+</Window>
