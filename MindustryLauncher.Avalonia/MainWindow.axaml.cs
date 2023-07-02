@@ -124,7 +124,7 @@ namespace MindustryLauncher
 
         private void RunCurrentInstance(object? sender, RoutedEventArgs e)
         {
-            InstanceManager.RunInstance(SelectedInstance!);
+            SelectedInstance?.Run();
         }
 
         private void OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
