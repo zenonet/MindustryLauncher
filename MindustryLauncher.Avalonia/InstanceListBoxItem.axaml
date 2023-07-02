@@ -4,5 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="MindustryLauncher.Avalonia.InstanceListBoxItem">
-    <TextBlock Name="InstanceNameTextBlock" />
+    <StackPanel Orientation="Horizontal">
+        <TextBlock Name="InstanceNameTextBlock" />
+        <TextBlock Name="StatusTextBlock" Margin="10, 0, 10, 0" Foreground="Gray" HorizontalAlignment="Stretch" FontStyle="Italic"/>
+    </StackPanel>
+
 </UserControl>
