@@ -97,31 +97,6 @@ public static class InstanceManager
         Instances.Remove(i);
         MainWindow.MainWindowInstance.UpdateInstanceList();
     }
-
-    public static void RunInstance(Instance i)
-    {
-        ProcessStartInfo startInfo = new()
-        {
-            FileName = JavaPath,
-            Arguments = "-jar " + Path.Join(i.Path, "mindustry.jar"),
-            RedirectStandardOutput = true,
-            CreateNoWindow = true,
-        };
-        startInfo.EnvironmentVariables["appdata"] = i.Path;
-        startInfo.EnvironmentVariables["XDG_DATA_HOME"] = i.Path;
-
-        Process? process = Process.Start(startInfo);
-
-        if (process is not {HasExited: false})
-            return;
-
-        i.IsRunning = true;
-        i.Process = process;
-
-        process.Exited += (_, _) => { i.IsRunning = false; };
-    }
-
-    private const string JavaPath = "java";
 }
 
 public class InstanceData
