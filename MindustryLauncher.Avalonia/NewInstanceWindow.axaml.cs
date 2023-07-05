@@ -13,7 +13,7 @@ public partial class NewInstanceWindow : Window
         InitializeComponent();
 
         versionsInDropdown = new();
-        VersionDropDown.Items = versionsInDropdown;
+        VersionDropDown.ItemsSource = versionsInDropdown;
 
         LoadAvailableVersions();
 

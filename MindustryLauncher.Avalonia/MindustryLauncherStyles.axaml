@@ -5,12 +5,4 @@
             <!-- Add Controls for Previewer Here -->
         </Border>
     </Design.PreviewWith>
-
-    <Style Selector="Button">
-        <Setter Property="FontFamily" Value="Calibri" />
-        <Setter Property="Foreground" Value="Red"></Setter>
-        <Setter Property="FontSize" Value="10" />
-        <Setter Property="Margin" Value="10" />
-        <Setter Property="Height" Value="25" />
-    </Style>
 </Styles>

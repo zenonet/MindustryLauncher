@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.Runtime.InteropServices;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
@@ -63,7 +63,7 @@ namespace MindustryLauncher
 
 
             InstanceList.SelectionChanged += OnSelectionChanged;
-            RunButton.Click += RunCurrentInstance;
+            RunButton.Click += HandleRunButtonClick;
             DeleteInstanceButton.Click += DeleteInstance;
             AddInstanceButton.Click += AddInstance;
             OpenMindustryFolderButton.Click += OpenMindustryFolder;
@@ -89,7 +89,7 @@ namespace MindustryLauncher
             //}
         }
 
-        protected override void OnClosing(CancelEventArgs e)
+        protected override void OnClosing(WindowClosingEventArgs e)
         {
             InstanceManager.Save();
         }
@@ -118,22 +118,62 @@ namespace MindustryLauncher
                         InstanceList.SelectedItem = listViewItem;
                 }
 
-                InstanceList.Items = ListBoxItems;
+                InstanceList.ItemsSource = ListBoxItems;
             });
         }
 
-        private void RunCurrentInstance(object? sender, RoutedEventArgs e)
+        private void HandleRunButtonClick(object? sender, RoutedEventArgs e)
         {
-            SelectedInstance?.Run();
+            if (SelectedInstance == null)
+                return;
+
+            if (SelectedInstance.IsRunning)
+                SelectedInstance.Process?.Kill();
+            else
+                SelectedInstance?.Run();
         }
 
         private void OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
+            //TODO:
+            SetRunButtonText();
+
+            if (SelectedInstance != null)
+            {
+                SelectedInstance.OnInstanceStarted -= SetStopButtonText;
+                SelectedInstance.OnInstanceExited -= SetRunButtonText;
+            }
+
             SelectedInstance = ((InstanceListBoxItem) InstanceList.SelectedItem!).Instance;
             InstanceName.Text = SelectedInstance.Name;
             InstanceVersion.Text = SelectedInstance.Version.ToString();
             // TODO: Fix the icon loading preventing the deletion of the instance because the icon is still loaded
             InstanceIconLarge.Source = new Bitmap(Path.Join(SelectedInstance.Path, "icon.ico"));
+
+            // Update the text on the run button according to the instances status
+            SelectedInstance.OnInstanceStarted += SetStopButtonText;
+            SelectedInstance.OnInstanceExited += SetRunButtonText;
+
+            if (SelectedInstance.IsRunning)
+                SetStopButtonText();
+        }
+
+        private void SetRunButtonText(object? sender = null, int _2 = 0)
+        {
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                if (sender == null || sender == SelectedInstance)
+                    RunButton.Content = "Run";
+            });
+        }
+
+        void SetStopButtonText(object? sender = null, object? _2 = null)
+        {
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                if (sender == null || sender == SelectedInstance)
+                    RunButton.Content = "Stop";
+            });
         }
 
         public void SetStatus(string s)

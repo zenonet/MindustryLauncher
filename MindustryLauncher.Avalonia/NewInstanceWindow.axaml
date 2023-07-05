@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Title="Create new Instance" Height="450" Width="800"
+    RequestedThemeVariant="Light"
     x:Class="MindustryLauncher.Avalonia.NewInstanceWindow">
     <Grid>
         <StackPanel Margin="50">

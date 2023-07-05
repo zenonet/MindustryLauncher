@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="MindustryLauncher.MainWindow"
+        RequestedThemeVariant="Light"
         Title="MindustryLauncher.Avalonia">
     <Grid>
 
@@ -15,15 +16,7 @@
             <RowDefinition Height="8*"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
         </Grid.RowDefinitions>
-        <ListBox Name="InstanceList">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Border Background="Red" CornerRadius="4" Padding="4">
-                        <TextBlock Text="" />
-                    </Border>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <ListBox Name="InstanceList" />
         <StackPanel Name="InstanceOptionsStackPanel" Grid.Column="1" Grid.Row="0" Orientation="Vertical"
                     HorizontalAlignment="Center">
             <StackPanel.Styles>
