@@ -51,7 +51,7 @@ namespace MindustryLauncher
 
         public static MainWindow MainWindowInstance = null!;
 
-        public List<InstanceListBoxItem> ListBoxItems { get; } = new();
+        public ObservableCollection<InstanceListBoxItem> ListBoxItems { get; } = new();
 
         public MainWindow()
         {
