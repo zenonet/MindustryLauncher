@@ -100,15 +100,7 @@ public static class InstanceManager
         MainWindow.MainWindowInstance.SetStatus("");
         MainWindow.MainWindowInstance.UpdateInstanceList();
     }
-
-    public static void DeleteInstance(Instance i)
-    {
-        //TODO: Move this to Instance.cs
-        if (i is not LocalClientInstance instance) return;
-        Directory.Delete(instance.Path, true);
-        Instances.Remove(instance);
-        MainWindow.MainWindowInstance.UpdateInstanceList();
-    }
+    
 }
 
 public class InstanceData

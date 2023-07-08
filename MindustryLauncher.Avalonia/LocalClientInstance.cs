@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Text.Json;
 using MindustryLauncher.Avalonia;
 
@@ -52,6 +53,13 @@ public class LocalClientInstance : Instance
     public override void Kill()
     {
         Process?.Kill();
+    }
+
+    public override void DeleteInstance()
+    {
+        Directory.Delete(Path, true);
+        InstanceManager.Instances.Remove(this);
+        MainWindow.MainWindowInstance.UpdateInstanceList();
     }
 
     private const string JavaPath = "java";

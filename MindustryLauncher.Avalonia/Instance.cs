@@ -17,6 +17,11 @@ public abstract class Instance
     {
     }
     
+    public virtual void DeleteInstance()
+    {
+
+    }
+    
     public virtual bool IsRunning { get; protected set; }
 
     #region Events

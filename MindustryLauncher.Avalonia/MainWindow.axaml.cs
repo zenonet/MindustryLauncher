@@ -88,7 +88,7 @@ namespace MindustryLauncher
             MessageBoxResult result = MessageBox.Show(this, "Deleting the instance will delete all its data.\nThis action is not undoable!", "Are you sure?", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {*/
-            InstanceManager.DeleteInstance(SelectedInstance!);
+            SelectedInstance?.DeleteInstance();
             //}
         }
 
