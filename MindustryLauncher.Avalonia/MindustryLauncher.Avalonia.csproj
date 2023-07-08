@@ -22,4 +22,23 @@
         <PackageReference Include="MessageBox.Avalonia" Version="3.0.1-rc2" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Windows\MainWindow.axaml.cs">
+        <DependentUpon>MainWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Windows\NewInstanceWindow.axaml.cs">
+        <DependentUpon>NewInstanceWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Windows\NewServerInstanceWindow.axaml.cs">
+        <DependentUpon>NewServerInstanceWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="UserControls\InstanceListBoxItem.axaml.cs">
+        <DependentUpon>InstanceListBoxItem.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
 </Project>
