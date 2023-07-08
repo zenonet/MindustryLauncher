@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
 using MindustryLauncher.Avalonia;
+using MindustryLauncher.Avalonia.Instances;
 using Newtonsoft.Json;
 
 namespace MindustryLauncher;
@@ -76,6 +77,25 @@ public static class InstanceManager
         MainWindow.MainWindowInstance.SetStatus($"Downloading mindustry v{version}...");
 
         LocalClientInstance instance = new()
+        {
+            Name = instanceName,
+            Version = version,
+            Path = instancePath,
+        };
+
+        Instances.Add(instance);
+    }
+
+    public static void CreateLocalServerInstance(string instanceName, Version version)
+    {
+        string instancePath = Path.Join(LauncherPath(), "instances", instanceName);
+        Directory.CreateDirectory(instancePath);
+        MindustryDownloader.DownloadVersion(Path.Join(instancePath, "mindustry-server.jar"), version, true).ContinueWith(OnInstanceDownloaded);
+
+
+        MainWindow.MainWindowInstance.SetStatus($"Downloading mindustry server v{version}...");
+
+        LocalServerInstance instance = new()
         {
             Name = instanceName,
             Version = version,

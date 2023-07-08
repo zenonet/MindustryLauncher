@@ -8,7 +8,6 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
-using MessageBox.Avalonia.DTO;
 using MessageBox.Avalonia.Enums;
 using MindustryLauncher.Avalonia;
 using MsBox.Avalonia;
@@ -72,6 +71,7 @@ namespace MindustryLauncher
             RunButton.Click += HandleRunButtonClick;
             DeleteInstanceButton.Click += DeleteInstance;
             AddInstanceButton.Click += AddInstance;
+            AddServerInstanceButton.Click += AddServerInstance;
             OpenMindustryFolderButton.Click += OpenMindustryFolder;
         }
 
@@ -130,6 +130,12 @@ namespace MindustryLauncher
             NewInstanceWindow window = new();
             window.Show();
         }
+        
+        private void AddServerInstance(object? sender, RoutedEventArgs e)
+        {
+            NewServerInstanceWindow window = new();
+            window.Show();
+        }
 
         public void UpdateInstanceList()
         {
@@ -166,7 +172,6 @@ namespace MindustryLauncher
 
         private void OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            //TODO:
             SetRunButtonText();
 
             if (SelectedInstance != null)
@@ -183,6 +188,14 @@ namespace MindustryLauncher
             {
                 // TODO: Fix the icon loading preventing the deletion of the instance because the icon is still loaded
                 InstanceIconLarge.Source = new Bitmap(Path.Join(instance.Path, "icon.ico"));
+            }
+            else
+            {
+                // Clear the icon if there is no icon for this instance
+                if (InstanceIconLarge.Source is Bitmap b)
+                {
+                    b.Dispose();
+                }
             }
 
             // Update the text on the run button according to the instances status

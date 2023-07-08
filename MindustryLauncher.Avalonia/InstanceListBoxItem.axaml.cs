@@ -20,7 +20,7 @@ public partial class InstanceListBoxItem : UserControl
 
         Instance = instance;
 
-        InstanceNameTextBlock.Text = instance.Name;
+        InstanceNameTextBlock.Text = instance.Name + (Instance is ServerInstance ? " (Server)" : "");
 
         Instance.InstanceStarted += OnInstanceStarted;
         Instance.InstanceExited += OnInstanceExited;

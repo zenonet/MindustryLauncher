@@ -8,15 +8,36 @@
     RequestedThemeVariant="Light"
     x:Class="MindustryLauncher.Avalonia.NewInstanceWindow">
     <Grid>
+        <Grid.Styles>
+            <Style Selector="Button">
+                <Setter Property="FontFamily" Value="Calibri" />
+                <Setter Property="Margin" Value="0, 20, 0, 0" />
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                <Setter Property="Width" Value="120"/>
+            </Style>
+            <Style Selector="TextBox">
+                <Setter Property="FontFamily" Value="Calibri" />
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="Width" Value="200"/>
+                <Setter Property="Height" Value="20"/>
+            </Style>
+            <Style Selector="Label">
+                <Setter Property="FontFamily" Value="Calibri" />
+                <Setter Property="Margin" Value="0, 20, 0, 0" />
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+                <Setter Property="Width" Value="120"/>
+            </Style>
+        </Grid.Styles>
         <StackPanel Margin="50">
             <StackPanel Orientation="Horizontal">
-                <Label HorizontalAlignment="Left">Instance Name:</Label>
-                <Label Name="InstanceNameErrorMessage" HorizontalAlignment="Left" Foreground="Red"></Label>
+                <Label>Instance Name:</Label>
+                <Label Name="InstanceNameErrorMessage" Foreground="Red"></Label>
             </StackPanel>
-            <TextBox Name="InstanceName" Width="200" Height="20" HorizontalAlignment="Left" />
-            <Label HorizontalAlignment="Left" Margin="0, 20, 0, 0">Version:</Label>
+            <TextBox Name="InstanceName"/>
+            <Label HorizontalAlignment="Left">Version:</Label>
             <ComboBox Name="VersionDropDown" Width="200" HorizontalAlignment="Left" />
-            <Button Name="CreateButton" Margin="0, 20, 0, 0" Width="75" HorizontalAlignment="Left" HorizontalContentAlignment="Center">Create</Button>
+            <Button Name="CreateButton">Create</Button>
         </StackPanel>
     </Grid>
 </Window>

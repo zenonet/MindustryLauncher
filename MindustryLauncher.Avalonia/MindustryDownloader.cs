@@ -9,7 +9,7 @@ namespace MindustryLauncher;
 public static class MindustryDownloader
 {
     private const string MindustryReleasesUrl = "https://github.com/Anuken/Mindustry/releases";
-    
+
     /// <summary>
     /// Gets a list of releases
     /// </summary>
@@ -36,21 +36,25 @@ public static class MindustryDownloader
         return versions;
     }
 
-    public static async Task<bool> DownloadVersion(string path, Version version)
+    public static async Task<bool> DownloadVersion(string path, Version version, bool downloadServer = false)
     {
         try
         {
             HttpClient client = new();
-            HttpResponseMessage response = await client.GetAsync(MindustryReleasesUrl + $"/download/v{version}/Mindustry.jar");
-            
+            HttpResponseMessage response = await client.GetAsync(MindustryReleasesUrl +
+                                                                 (downloadServer
+                                                                     ? $"/download/v{version}/server-release.jar"
+                                                                     : $"/download/v{version}/Mindustry.jar")
+            );
+
             FileStream fileStream = File.Open(path, FileMode.Create);
-            
+
             await response.Content.CopyToAsync(fileStream);
 
             await fileStream.FlushAsync();
 
             fileStream.Close();
-            
+
             return true;
         }
         catch (Exception)
@@ -58,5 +62,4 @@ public static class MindustryDownloader
             return false;
         }
     }
-
 }

@@ -1,0 +1,89 @@
+﻿<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Create new Instance" Height="450" Width="800"
+    RequestedThemeVariant="Light"
+    x:Class="MindustryLauncher.Avalonia.NewServerInstanceWindow">
+    <Grid>
+        <Grid.Styles>
+            <Style Selector="Button">
+                <Setter Property="FontFamily" Value="Calibri" />
+                <Setter Property="Margin" Value="0, 20, 0, 0" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="Width" Value="75" />
+            </Style>
+            <Style Selector="TextBox">
+                <Setter Property="FontFamily" Value="Calibri" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="Width" Value="200" />
+                <Setter Property="Height" Value="20" />
+            </Style>
+            <Style Selector="Label">
+                <Setter Property="FontFamily" Value="Calibri" />
+                <Setter Property="Margin" Value="0, 20, 0, 0" />
+                <Setter Property="HorizontalAlignment" Value="Left" />
+                <Setter Property="Width" Value="130" />
+            </Style>
+        </Grid.Styles>
+        <TabControl>
+            <TabItem Header="Local">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+
+                    <StackPanel Margin="20">
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label>Server Instance Name:</Label>
+                            <Label Name="Local_InstanceNameErrorMessage" Foreground="Red"></Label>
+                        </StackPanel>
+                        <TextBox Name="Local_InstanceName" />
+
+                        <Label>Version:</Label>
+                        <ComboBox Name="Local_VersionDropDown" Width="200" HorizontalAlignment="Left" />
+
+                        <Button Name="Local_CreateButton">
+                            Create
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Remote Docker">
+                <ScrollViewer>
+                    <StackPanel Margin="20">
+                        <StackPanel Orientation="Horizontal">
+                            <Label HorizontalAlignment="Left">Server Instance Name:</Label>
+                            <Label Name="RemoteDocker_InstanceNameErrorMessage" HorizontalAlignment="Left"
+                                   Foreground="Red">
+                            </Label>
+                        </StackPanel>
+                        <TextBox Name="RemoteDocker_InstanceName" />
+
+                        <Label FontSize="22">SSH Settings</Label>
+                        <StackPanel Margin="25, 0, 0, 0">
+                            <Label HorizontalAlignment="Left">IP-Address:</Label>
+                            <TextBox Name="RemoteDocker_SshIp" />
+
+                            <Label>Username:</Label>
+                            <TextBox Name="RemoteDocker_SshUserName" />
+
+                            <Label>Password:</Label>
+                            <TextBox Name="RemoteDocker_SshPassword" PasswordChar="*" />
+                        </StackPanel>
+
+                        <Label>Version:</Label>
+                        <ComboBox Name="RemoteDocker_VersionDropDown" Width="200" HorizontalAlignment="Left" />
+
+                        <Button Name="RemoteDocker_CreateButton" Margin="0, 20, 0, 0" Width="75"
+                                HorizontalAlignment="Left"
+                                HorizontalContentAlignment="Center">
+                            Create
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>
