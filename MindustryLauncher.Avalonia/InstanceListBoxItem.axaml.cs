@@ -22,8 +22,8 @@ public partial class InstanceListBoxItem : UserControl
 
         InstanceNameTextBlock.Text = instance.Name;
 
-        Instance.OnInstanceStarted += OnInstanceStarted;
-        Instance.OnInstanceExited += OnInstanceExited;
+        Instance.InstanceStarted += OnInstanceStarted;
+        Instance.InstanceExited += OnInstanceExited;
     }
 
     private void OnInstanceStarted(object? _, EventArgs e)

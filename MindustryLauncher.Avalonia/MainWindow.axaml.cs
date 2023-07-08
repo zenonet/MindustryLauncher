@@ -71,7 +71,10 @@ namespace MindustryLauncher
 
         private void OpenMindustryFolder(object? sender, RoutedEventArgs e)
         {
-            string mindustryPath = Path.Join(SelectedInstance!.Path, "Mindustry");
+            if (SelectedInstance is not LocalClientInstance instance)
+                return;
+
+            string mindustryPath = Path.Join(instance.Path, "Mindustry");
 
             using Process folderOpener = new();
             folderOpener.StartInfo.FileName = Path.GetDirectoryName(mindustryPath);
@@ -140,19 +143,23 @@ namespace MindustryLauncher
 
             if (SelectedInstance != null)
             {
-                SelectedInstance.OnInstanceStarted -= SetStopButtonText;
-                SelectedInstance.OnInstanceExited -= SetRunButtonText;
+                SelectedInstance.InstanceStarted -= SetStopButtonText;
+                SelectedInstance.InstanceExited -= SetRunButtonText;
             }
 
             SelectedInstance = ((InstanceListBoxItem) InstanceList.SelectedItem!).Instance;
             InstanceName.Text = SelectedInstance.Name;
             InstanceVersion.Text = SelectedInstance.Version.ToString();
-            // TODO: Fix the icon loading preventing the deletion of the instance because the icon is still loaded
-            InstanceIconLarge.Source = new Bitmap(Path.Join(SelectedInstance.Path, "icon.ico"));
+
+            if (SelectedInstance is LocalClientInstance instance)
+            {
+                // TODO: Fix the icon loading preventing the deletion of the instance because the icon is still loaded
+                InstanceIconLarge.Source = new Bitmap(Path.Join(instance.Path, "icon.ico"));
+            }
 
             // Update the text on the run button according to the instances status
-            SelectedInstance.OnInstanceStarted += SetStopButtonText;
-            SelectedInstance.OnInstanceExited += SetRunButtonText;
+            SelectedInstance.InstanceStarted += SetStopButtonText;
+            SelectedInstance.InstanceExited += SetRunButtonText;
 
             if (SelectedInstance.IsRunning)
                 SetStopButtonText();

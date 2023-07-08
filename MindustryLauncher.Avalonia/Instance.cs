@@ -1,68 +1,40 @@
 ﻿using System;
-using System.Diagnostics;
-using System.Text.Json;
 
-namespace MindustryLauncher;
+namespace MindustryLauncher.Avalonia;
 
-public class Instance
+public abstract class Instance
 {
+    public Version Version { get; set; }
+    
     public string Name { get; set; }
 
-    public string Path { get; set; }
-
-    public Version Version { get; set; }
-
-    public static Instance Parse(string json)
+    public virtual void Run()
     {
-        return JsonSerializer.Deserialize<Instance>(json) ?? throw new InvalidOperationException("The provided json instance was invalid");
+        
     }
 
-    [NonSerialized] public Process? Process;
-
-    [NonSerialized] public bool IsRunning;
-
-    public void Run()
+    public virtual void Kill()
     {
-        ProcessStartInfo startInfo = new()
-        {
-            FileName = JavaPath,
-            Arguments = "-jar " + System.IO.Path.Join(Path, "mindustry.jar"),
-            RedirectStandardOutput = true,
-            CreateNoWindow = true,
-        };
-        startInfo.EnvironmentVariables["appdata"] = Path;
-        startInfo.EnvironmentVariables["XDG_DATA_HOME"] = Path;
-
-        Process? process = Process.Start(startInfo);
-
-        if (process is null || process.HasExited)
-            return;
-
-        process.EnableRaisingEvents = true;
-
-        IsRunning = true;
-        Process = process;
-
-        process.Exited += (_, _) =>
-        {
-            IsRunning = false;
-            OnInstanceExited.Invoke(this, process.ExitCode);
-        };
-
-        OnInstanceStarted.Invoke(this, EventArgs.Empty);
     }
-
-    public void Kill()
-    {
-        Process?.Kill();
-    }
-
-    private const string JavaPath = "java";
+    
+    public virtual bool IsRunning { get; protected set; }
 
     #region Events
 
-    public event EventHandler OnInstanceStarted = delegate { };
-    public event EventHandler<int> OnInstanceExited = delegate { };
+    
 
+    public event EventHandler InstanceStarted = delegate { };
+    public event EventHandler<int> InstanceExited = delegate { };
+
+    protected void OnInstanceStarted()
+    {
+        InstanceStarted.Invoke(this, EventArgs.Empty);
+    }
+
+    protected void OnInstanceExited(int exitCode)
+    {
+        InstanceExited.Invoke(this, exitCode);
+    }
+    
     #endregion
 }

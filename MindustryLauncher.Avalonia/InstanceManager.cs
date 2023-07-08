@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Text.Json;
 using System.Threading.Tasks;
+using MindustryLauncher.Avalonia;
+using Newtonsoft.Json;
 
 namespace MindustryLauncher;
 
@@ -27,7 +27,10 @@ public static class InstanceManager
         }
 
         string dataText = File.ReadAllText(GetDataPath());
-        InstanceData? instanceData = JsonSerializer.Deserialize<InstanceData>(dataText);
+        InstanceData? instanceData = JsonConvert.DeserializeObject<InstanceData>(dataText, new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.Auto
+        });
 
         if (instanceData == null)
         {
@@ -42,10 +45,17 @@ public static class InstanceManager
     {
         Directory.CreateDirectory(LauncherPath());
 
-        string dataString = JsonSerializer.Serialize(new InstanceData()
-        {
-            Instances = Instances.ToArray(),
-        });
+        string dataString = JsonConvert.SerializeObject(
+            new InstanceData
+            {
+                Instances = Instances.ToArray(),
+            },
+            Formatting.Indented,
+            new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            }
+        );
 
         File.WriteAllText(GetDataPath(), dataString);
     }
@@ -56,7 +66,7 @@ public static class InstanceManager
         Directory.CreateDirectory(instancePath);
         MindustryDownloader.DownloadVersion(Path.Join(instancePath, "mindustry.jar"), version).ContinueWith(downloadTask =>
         {
-            if(downloadTask.Result)
+            if (downloadTask.Result)
                 ExtractIcon(instancePath);
             // Hand over the result of the download task to the next task
             return downloadTask.Result;
@@ -65,7 +75,7 @@ public static class InstanceManager
 
         MainWindow.MainWindowInstance.SetStatus($"Downloading mindustry v{version}...");
 
-        Instance instance = new()
+        LocalClientInstance instance = new()
         {
             Name = instanceName,
             Version = version,
@@ -93,8 +103,10 @@ public static class InstanceManager
 
     public static void DeleteInstance(Instance i)
     {
-        Directory.Delete(i.Path, true);
-        Instances.Remove(i);
+        //TODO: Move this to Instance.cs
+        if (i is not LocalClientInstance instance) return;
+        Directory.Delete(instance.Path, true);
+        Instances.Remove(instance);
         MainWindow.MainWindowInstance.UpdateInstanceList();
     }
 }
