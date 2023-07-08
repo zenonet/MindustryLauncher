@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -7,7 +8,12 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
+using MessageBox.Avalonia.DTO;
+using MessageBox.Avalonia.Enums;
 using MindustryLauncher.Avalonia;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Base;
+using MsBox.Avalonia.Enums;
 
 namespace MindustryLauncher
 {
@@ -84,18 +90,34 @@ namespace MindustryLauncher
 
         private void DeleteInstance(object? sender, RoutedEventArgs e)
         {
-            /*
-            MessageBoxResult result = MessageBox.Show(this, "Deleting the instance will delete all its data.\nThis action is not undoable!", "Are you sure?", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes)
-            {*/
-            if (InstanceIconLarge.Source is Bitmap b)
+            // Buffer the selected instance in case another is seleted
+            Instance i = SelectedInstance!;
+            // Create a msg box
+            IMsBox<ButtonResult>? confirmationBox = MessageBoxManager.GetMessageBoxStandard(new()
             {
-                // Allow deletion of the instance by closing the icon
-                b.Dispose();
-            }
-            SelectedInstance?.DeleteInstance();
-            UpdateInstanceList();
-            //}
+                ButtonDefinitions = ButtonEnum.OkCancel,
+                ContentTitle = "Are you sure?",
+                ContentMessage = $"This will delete the instance {SelectedInstance!.Name} and all its files.\nThis action is not undoable",
+                Topmost = true,
+            });
+            confirmationBox.ShowWindowAsync().ContinueWith(result =>
+            {
+                Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    if (result.Result != ButtonResult.Ok)
+                        return;
+
+                    if (selectedInstance == i && InstanceIconLarge.Source is Bitmap b)
+                    {
+                        // Allow deletion of the instance by closing the icon
+                        b.Dispose();
+                    }
+
+                    i.DeleteInstance();
+                    UpdateInstanceList();
+                });
+
+            });
         }
 
         protected override void OnClosing(WindowClosingEventArgs e)
