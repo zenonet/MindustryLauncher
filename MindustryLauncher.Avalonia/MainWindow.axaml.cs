@@ -128,7 +128,7 @@ namespace MindustryLauncher
                 return;
 
             if (SelectedInstance.IsRunning)
-                SelectedInstance.Process?.Kill();
+                SelectedInstance.Kill();
             else
                 SelectedInstance?.Run();
         }

@@ -52,6 +52,11 @@ public class Instance
         OnInstanceStarted.Invoke(this, EventArgs.Empty);
     }
 
+    public void Kill()
+    {
+        Process?.Kill();
+    }
+
     private const string JavaPath = "java";
 
     #region Events
