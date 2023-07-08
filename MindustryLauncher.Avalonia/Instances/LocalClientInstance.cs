@@ -6,7 +6,7 @@ using MindustryLauncher.Avalonia;
 
 namespace MindustryLauncher;
 
-public class LocalClientInstance : Instance
+public class LocalClientInstance : Instance, IFolderOpenable
 {
 
     public string Path { get; set; }
