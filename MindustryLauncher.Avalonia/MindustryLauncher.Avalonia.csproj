@@ -40,5 +40,9 @@
         <DependentUpon>InstanceListBoxItem.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="ServerManagementGui\ServerManagementWindow.axaml.cs">
+        <DependentUpon>ServerManagementWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>

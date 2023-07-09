@@ -72,6 +72,9 @@
                             <Label>Password:</Label>
                             <TextBox Name="RemoteDocker_SshPassword" PasswordChar="*" />
                         </StackPanel>
+                        
+                        <Label HorizontalAlignment="Left">Container Name:</Label>
+                        <TextBox Name="RemoteDocker_ContainerName" />
 
                         <Label>Version:</Label>
                         <ComboBox Name="RemoteDocker_VersionDropDown" Width="200" HorizontalAlignment="Left" />

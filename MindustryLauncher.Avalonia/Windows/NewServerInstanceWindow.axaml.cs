@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using MindustryLauncher.Avalonia.Instances;
 
 namespace MindustryLauncher.Avalonia;
 
@@ -43,7 +44,17 @@ public partial class NewServerInstanceWindow : Window
     
     private void OnRemoteDockerCreateButtonClicked(object? sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException("Remote docker instances are not implemented yet");
+        RemoteDockerServerInstance i = new();
+
+        i.Ip = RemoteDocker_SshIp.Text!;
+        i.Usernsame = RemoteDocker_SshUserName.Text!;
+        i.Password = RemoteDocker_SshPassword.Text!;
+        i.ContainerName = RemoteDocker_ContainerName.Text!;
+        i.Version = Version.Parse(((ComboBoxItem)RemoteDocker_VersionDropDown.SelectedItem!).Content!.ToString()!);
+        
+        InstanceManager.Instances.Add(i);
+        MainWindow.MainWindowInstance.UpdateInstanceList();
+        this.Close();
     }
     
     private ObservableCollection<ComboBoxItem> versionsInDropdown;

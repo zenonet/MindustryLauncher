@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using Avalonia.Controls;
@@ -10,6 +7,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using MessageBox.Avalonia.Enums;
 using MindustryLauncher.Avalonia;
+using MindustryLauncher.Avalonia.Windows;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Base;
 using MsBox.Avalonia.Enums;
@@ -73,6 +71,29 @@ namespace MindustryLauncher
             AddInstanceButton.Click += AddInstance;
             AddServerInstanceButton.Click += AddServerInstance;
             OpenMindustryFolderButton.Click += OpenMindustryFolder;
+            OpenServerWindowButton.Click += OpenServerWindow;
+        }
+
+        private ServerManagementWindow? serverManagementWindow;
+        private void OpenServerWindow(object? sender, RoutedEventArgs e)
+        {
+            if (serverManagementWindow == null)
+            {
+                goto openServerManagementWindow;
+            }
+            if (serverManagementWindow.Server == selectedInstance)
+            {
+                return;
+            }
+
+            if (serverManagementWindow.Server != SelectedInstance)
+            {
+                serverManagementWindow.Close();
+            }
+
+            openServerManagementWindow:
+            serverManagementWindow = new((ServerInstance) SelectedInstance!);
+            serverManagementWindow.Show();
         }
 
         private void OpenMindustryFolder(object? sender, RoutedEventArgs e)
@@ -204,6 +225,8 @@ namespace MindustryLauncher
 
             if (SelectedInstance.IsRunning)
                 SetStopButtonText();
+
+            OpenServerWindowButton.IsVisible = SelectedInstance is ServerInstance;
         }
 
         private void SetRunButtonText(object? sender = null, int _2 = 0)

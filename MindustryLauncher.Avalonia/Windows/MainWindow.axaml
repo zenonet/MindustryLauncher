@@ -33,6 +33,7 @@
             <TextBlock TextAlignment="Center" FontSize="12" Name="InstanceVersion">145.1</TextBlock>
             <Button Name="RunButton">Run</Button>
             <Button Name="OpenMindustryFolderButton">Mindustry folder</Button>
+            <Button Name="OpenServerWindowButton" IsVisible="False">Server Management</Button>
             <Button Name="DeleteInstanceButton">Delete</Button>
         </StackPanel>
 

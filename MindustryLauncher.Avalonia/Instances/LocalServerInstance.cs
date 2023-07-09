@@ -27,7 +27,7 @@ public class LocalServerInstance : ServerInstance, IFolderOpenable
         startInfo.EnvironmentVariables["XDG_DATA_HOME"] = Path;
 
         Process? process = Process.Start(startInfo);
-        
+
         if (process is null || process.HasExited)
             return;
 
@@ -39,13 +39,17 @@ public class LocalServerInstance : ServerInstance, IFolderOpenable
         process.Exited += (_, _) =>
         {
             IsRunning = false;
+            ServerOutput?.Dispose();
+            ServerInput?.Dispose();
+            ServerOutput = null;
+            ServerInput = null;
             OnInstanceExited(process.ExitCode);
         };
 
         OnInstanceStarted();
-        
-        Process.StandardInput.WriteLine("host");
-        
+
+        ServerInput = Process.StandardInput;
+        ServerOutput = Process.StandardOutput;
     }
 
     public override void Kill()
