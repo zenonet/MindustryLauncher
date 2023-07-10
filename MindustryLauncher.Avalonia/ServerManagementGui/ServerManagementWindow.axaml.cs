@@ -44,8 +44,14 @@ public partial class ServerManagementWindow : Window
 
     private void SendConsoleCommand(object? sender, RoutedEventArgs e)
     {
+        EnsureServerIsRunning();
         Server.ServerInput?.WriteLine(ConsoleInput.Text);
         ConsoleInput.Text = "";
+    }
+
+    private void EnsureServerIsRunning()
+    {
+        throw new NotImplementedException();
     }
 
     private void ServerHandler()
@@ -121,6 +127,7 @@ public partial class ServerManagementWindow : Window
 
     private void OnHostButtonClick(object? sender, RoutedEventArgs e)
     {
+        EnsureServerIsRunning();
         Server.ServerInput!.WriteLine("host");
     }
 
