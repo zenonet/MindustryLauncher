@@ -4,9 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="MindustryLauncher.Avalonia.ServerManagementGui.PlayerControl">
-    <StackPanel Orientation="Horizontal">
-        <TextBlock Name="PlayerNameTextBlock" VerticalAlignment="Center" />
-        <Button Name="KickButton" VerticalAlignment="Center">Kick</Button>
-        <Button Name="AdminButton" VerticalAlignment="Center">Make Admin</Button>
-    </StackPanel>
+    <DockPanel LastChildFill="False">
+        <TextBlock Name="PlayerNameTextBlock" DockPanel.Dock="Left" VerticalAlignment="Center" />
+        <Button Name="KickButton" VerticalAlignment="Center" DockPanel.Dock="Right">Kick</Button>
+        <Button Name="AdminButton" VerticalAlignment="Center" DockPanel.Dock="Right">Make Admin</Button>
+    </DockPanel>
 </UserControl>
