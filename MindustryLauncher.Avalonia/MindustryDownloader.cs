@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -17,9 +19,38 @@ public static class MindustryDownloader
     /// <returns>An array with the available versions</returns>
     public static Version[] GetVersions(int count = -1)
     {
-        HttpClient client = new();
+        int pages = count == -1 ? 1 : (int) MathF.Ceiling(count / 10);
 
-        Task<HttpResponseMessage> task = client.GetAsync("https://github.com/Anuken/Mindustry/tags");
+        HttpClient client = new();
+        List<Version> versions = new();
+
+        Version? oldestVersion = null;
+        for (int page = 0; page < pages; page++)
+        {
+            Version[] versionsOfPage = GetVersionPage(client, oldestVersion);
+
+            oldestVersion = versionsOfPage.Last();
+
+            versions.AddRange(versionsOfPage);
+        }
+
+        if (count != -1)
+        {
+            // Ensure the list contains exactly count versions
+            versions.RemoveRange(count, versions.Count - count);
+        }
+        
+        return versions.ToArray();
+    }
+
+    private static Version[] GetVersionPage(HttpClient client, Version? after = null)
+    {
+        string url =
+            after == null
+                ? "https://github.com/Anuken/Mindustry/tags"
+                : $"https://github.com/Anuken/Mindustry/tags?after=v{after}";
+
+        Task<HttpResponseMessage> task = client.GetAsync(url);
         task.Wait();
 
         string result = task.Result.Content.ReadAsStringAsync().Result;
