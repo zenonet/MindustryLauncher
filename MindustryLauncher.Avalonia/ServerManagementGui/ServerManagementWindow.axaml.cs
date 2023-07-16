@@ -10,7 +10,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using MessageBox.Avalonia.Enums;
 using MindustryLauncher.Avalonia.ServerManagementGui;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Base;
+using MsBox.Avalonia.Enums;
 
 namespace MindustryLauncher.Avalonia.Windows;
 
@@ -44,14 +48,25 @@ public partial class ServerManagementWindow : Window
 
     private void SendConsoleCommand(object? sender, RoutedEventArgs e)
     {
-        EnsureServerIsRunning();
+        try { EnsureServerIsRunning(); }
+        catch {return;}
+        
+
         Server.ServerInput?.WriteLine(ConsoleInput.Text);
         ConsoleInput.Text = "";
     }
 
     private void EnsureServerIsRunning()
     {
-        throw new NotImplementedException();
+        IMsBox<ButtonResult>? confirmationBox = MessageBoxManager.GetMessageBoxStandard(new()
+        {
+            ButtonDefinitions = ButtonEnum.Ok,
+            ContentTitle = "Server is not running",
+            ContentMessage = "You can't do that because shis server is not running.",
+            Topmost = true,
+        });
+        confirmationBox.ShowAsPopupAsync(this);
+        throw new ServerNotRunningException();
     }
 
     private void ServerHandler()
@@ -90,17 +105,13 @@ public partial class ServerManagementWindow : Window
                 Match matchCopy = match;
                 Dispatcher.UIThread.InvokeAsync(() => { playerControls.Add(new(matchCopy.Groups[1].Value, matchCopy.Groups[2].Value)); });
             }
-            
+
             match = Regex.Match(line, "\\[.*\\] \\[I\\] (.*?) has disconnected\\. \\[(\\w*==)\\].*");
             if (match.Success)
             {
-                Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    playerControls.Remove(playerControls.First(x => x.Uuid == match.Groups[2].Value));
-                });
+                Dispatcher.UIThread.InvokeAsync(() => { playerControls.Remove(playerControls.First(x => x.Uuid == match.Groups[2].Value)); });
             }
-            
-            
+
 
             Dispatcher.UIThread.Invoke(() =>
             {
@@ -127,7 +138,9 @@ public partial class ServerManagementWindow : Window
 
     private void OnHostButtonClick(object? sender, RoutedEventArgs e)
     {
-        EnsureServerIsRunning();
+        try { EnsureServerIsRunning(); }
+        catch {return;}        
+        
         Server.ServerInput!.WriteLine("host");
     }
 
@@ -143,5 +156,9 @@ public partial class ServerManagementWindow : Window
             Server.Run();
             StartStopButton.Content = "Stop";
         }
+    }
+
+    internal class ServerNotRunningException : Exception
+    {
     }
 }
