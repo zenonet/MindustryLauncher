@@ -104,7 +104,7 @@ namespace MindustryLauncher
             string mindustryPath = Path.Join(instance.Path, "Mindustry");
 
             using Process folderOpener = new();
-            folderOpener.StartInfo.FileName = Path.GetDirectoryName(mindustryPath);
+            folderOpener.StartInfo.FileName = mindustryPath;
             folderOpener.StartInfo.UseShellExecute = true;
             folderOpener.Start();
         }
