@@ -12,6 +12,8 @@ public static class MindustryDownloader
 {
     private const string MindustryReleasesUrl = "https://github.com/Anuken/Mindustry/releases";
 
+    private static readonly HttpClient httpClient = new();
+    
     /// <summary>
     /// Gets a list of releases
     /// </summary>
@@ -21,13 +23,12 @@ public static class MindustryDownloader
     {
         int pages = count == -1 ? 1 : (int) MathF.Ceiling(count / 10);
 
-        HttpClient client = new();
         List<Version> versions = new();
 
         Version? oldestVersion = null;
         for (int page = 0; page < pages; page++)
         {
-            Version[] versionsOfPage = GetVersionPage(client, oldestVersion);
+            Version[] versionsOfPage = GetVersionPage(oldestVersion);
 
             oldestVersion = versionsOfPage.Last();
 
@@ -43,14 +44,14 @@ public static class MindustryDownloader
         return versions.ToArray();
     }
 
-    private static Version[] GetVersionPage(HttpClient client, Version? after = null)
+    public static Version[] GetVersionPage(Version? after = null)
     {
         string url =
             after == null
                 ? "https://github.com/Anuken/Mindustry/tags"
                 : $"https://github.com/Anuken/Mindustry/tags?after=v{after}";
 
-        Task<HttpResponseMessage> task = client.GetAsync(url);
+        Task<HttpResponseMessage> task = httpClient.GetAsync(url);
         task.Wait();
 
         string result = task.Result.Content.ReadAsStringAsync().Result;
@@ -71,8 +72,7 @@ public static class MindustryDownloader
     {
         try
         {
-            HttpClient client = new();
-            HttpResponseMessage response = await client.GetAsync(MindustryReleasesUrl +
+            HttpResponseMessage response = await httpClient.GetAsync(MindustryReleasesUrl +
                                                                  (downloadServer
                                                                      ? $"/download/v{version}/server-release.jar"
                                                                      : $"/download/v{version}/Mindustry.jar")
