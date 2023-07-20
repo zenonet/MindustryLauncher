@@ -3,12 +3,12 @@ using System.Text.RegularExpressions;
 
 namespace MindustryLauncher;
 
-public partial class Version
+public partial struct Version : IComparable<Version>
 {
     public int Major { get; set; }
 
     public int Minor { get; set; }
-    
+
     public Version(int major, int minor)
     {
         Major = major;
@@ -35,5 +35,38 @@ public partial class Version
     public override string ToString()
     {
         return Minor == 0 ? Major.ToString() : $"{Major}.{Minor}";
+    }
+
+    public static bool operator >(Version left, Version rigth)
+    {
+        int majorDifference = left.Major - rigth.Major;
+        int minorDifference = left.Minor - rigth.Minor;
+
+        return majorDifference == 0 ? minorDifference > 0 : majorDifference > 0;
+    }
+
+    public static bool operator <(Version left, Version rigth)
+    {
+        int majorDifference = left.Major - rigth.Major;
+        int minorDifference = left.Minor - rigth.Minor;
+
+        return majorDifference == 0 ? minorDifference < 0 : majorDifference < 0;
+    }
+
+    public static bool operator ==(Version left, Version rigth)
+    {
+        return left.Major == rigth.Major && left.Minor == rigth.Minor;
+    }
+
+    public static bool operator !=(Version left, Version rigth)
+    {
+        return !(left == rigth);
+    }
+
+    public int CompareTo(Version other)
+    {
+        int majorComparison = Major.CompareTo(other.Major);
+        if (majorComparison != 0) return majorComparison;
+        return Minor.CompareTo(other.Minor);
     }
 }
