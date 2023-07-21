@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userControls="clr-namespace:MindustryLauncher.Avalonia.UserControls"
     mc:Ignorable="d"
     Title="Create new Instance" Height="450" Width="800"
     RequestedThemeVariant="Light"
@@ -36,7 +37,7 @@
             </StackPanel>
             <TextBox Name="InstanceName"/>
             <Label HorizontalAlignment="Left">Version:</Label>
-            <ComboBox Name="VersionDropDown" Width="200" HorizontalAlignment="Left" />
+            <userControls:MindustryVersionComboBox Name="VersionComboBox" Width="200" HorizontalAlignment="Left" />
             <Button Name="CreateButton">Create</Button>
         </StackPanel>
     </Grid>

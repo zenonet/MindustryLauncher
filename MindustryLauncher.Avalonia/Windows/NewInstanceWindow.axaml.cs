@@ -6,18 +6,13 @@ namespace MindustryLauncher.Avalonia;
 
 public partial class NewInstanceWindow : Window
 {
-    private ObservableCollection<ComboBoxItem> versionsInDropdown;
-
     public NewInstanceWindow()
     {
         InitializeComponent();
-
-        versionsInDropdown = new();
-        VersionDropDown.ItemsSource = versionsInDropdown;
-
-        LoadAvailableVersions();
-
+        
         CreateButton.Click += CreateInstance;
+        
+        VersionComboBox.LoadVersions(10);
     }
 
     private void CreateInstance(object? sender, RoutedEventArgs e)
@@ -28,22 +23,7 @@ public partial class NewInstanceWindow : Window
             return;
         }
 
-        InstanceManager.CreateInstance(InstanceName.Text, Version.Parse(((ComboBoxItem) VersionDropDown.SelectedItem).Content.ToString()!));
+        InstanceManager.CreateInstance(InstanceName.Text, VersionComboBox.SelectedVersion!.Value);
         this.Close();
-    }
-
-    private void LoadAvailableVersions()
-    {
-        Version[] versions = MindustryDownloader.GetVersions(10);
-
-        versionsInDropdown.Clear();
-
-        foreach (Version v in versions)
-        {
-            versionsInDropdown.Add(new()
-            {
-                Content = v.ToString(),
-            });
-        }
     }
 }

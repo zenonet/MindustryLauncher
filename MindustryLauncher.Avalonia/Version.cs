@@ -15,6 +15,14 @@ public partial struct Version : IComparable<Version>
         Minor = minor;
     }
 
+    #region Static Fields
+
+    public static readonly Version MinVersionWithBuild = new(58, 0);
+    
+    public static readonly Version MinVersionWithNewBuildName = new(90, 0);
+
+    #endregion
+
 
     public static Version Parse(string input)
     {

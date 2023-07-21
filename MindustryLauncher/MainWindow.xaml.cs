@@ -55,7 +55,7 @@ namespace MindustryLauncher
 
         private void OpenMindustryFolder(object sender, RoutedEventArgs e)
         {
-            Process.Start("explorer.exe", Path.Join(SelectedInstance!.Path, "Mindustry"));
+            Process.Start("explorer.exe", Path.Join(SelectedInstance!.Path, "Mindustry/"));
         }
 
         private void DeleteInstance(object sender, RoutedEventArgs e)

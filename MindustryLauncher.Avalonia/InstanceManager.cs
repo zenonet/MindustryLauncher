@@ -107,11 +107,27 @@ public static class InstanceManager
 
     private static void ExtractIcon(string instancePath)
     {
-        using ZipArchive archive = ZipFile.OpenRead(Path.Join(instancePath, "mindustry.jar"));
+        try
+        {
+            using ZipArchive archive = ZipFile.OpenRead(Path.Join(instancePath, "mindustry.jar"));
 
-        ZipArchiveEntry entry = archive.GetEntry("icons/icon.ico")!;
+            ZipArchiveEntry? entry;
+            entry = archive.GetEntry("icons/icon.ico")!;
+            if (entry != null)
+                goto extraction;
+            entry = archive.GetEntry("sprites/icon.png");
+            if (entry != null)
+                goto extraction;
 
-        entry.ExtractToFile(Path.Join(instancePath, "icon.ico"));
+            return;
+
+            extraction:
+            entry.ExtractToFile(Path.Join(instancePath, entry.Name));
+        }
+        catch
+        {
+            // ignore
+        }
     }
 
     private static void OnInstanceDownloaded(Task<bool> task)
@@ -120,7 +136,6 @@ public static class InstanceManager
         MainWindow.MainWindowInstance.SetStatus("");
         MainWindow.MainWindowInstance.UpdateInstanceList();
     }
-    
 }
 
 public class InstanceData
