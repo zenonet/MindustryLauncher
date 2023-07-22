@@ -3,7 +3,7 @@ using System;
 
 namespace MindustryLauncher.Avalonia;
 
-class Program
+internal static class Program
 {
     // Initialization code. Don't use any Avalonia, third-party APIs or any
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
@@ -17,4 +17,6 @@ class Program
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .LogToTrace();
+
+    public static string LauncherPath() => "MindustryLauncher";
 }
