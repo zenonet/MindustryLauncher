@@ -17,7 +17,7 @@ public static class InstanceManager
 
     private static string GetDataPath() => $"{LauncherPath()}/mindustrylauncher.json";
 
-    private static string LauncherPath() => "MindustryLauncher";
+    public static string LauncherPath() => "MindustryLauncher";
 
     public static void LoadInstances()
     {
