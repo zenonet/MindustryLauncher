@@ -13,7 +13,7 @@ public static class MindustryDownloader
     private const string MindustryReleasesUrl = "https://github.com/Anuken/Mindustry/releases";
 
     private static readonly HttpClient httpClient = new();
-    
+
     /// <summary>
     /// Gets a list of releases
     /// </summary>
@@ -40,7 +40,7 @@ public static class MindustryDownloader
             // Ensure the list contains exactly count versions
             versions.RemoveRange(count, versions.Count - count);
         }
-        
+
         return versions.ToArray();
     }
 
@@ -56,7 +56,7 @@ public static class MindustryDownloader
 
         string result = task.Result.Content.ReadAsStringAsync().Result;
 
-        MatchCollection matches = Regex.Matches(result, "<a href=\"\\/Anuken\\/Mindustry\\/releases\\/tag\\/v(\\d+(?:\\.\\d+)?)\" data-view-component=\"true\" class=\"Link--primary\">v\\1<\\/a>");
+        MatchCollection matches = Regex.Matches(result, "<a href=\"\\/Anuken\\/Mindustry\\/releases\\/tag\\/v(\\d+(?:\\.\\d+)?)\" .*?>v\\1<\\/a>");
 
         Version[] versions = new Version[matches.Count];
 
@@ -68,15 +68,26 @@ public static class MindustryDownloader
         return versions;
     }
 
+    private static string GetDownloadUrl(Version version, bool isServer = false)
+    {
+        string downloadUrl = MindustryReleasesUrl + $"/download/v{version}/";
+
+        // Pick the right file name based on the version
+        if (isServer)
+            return downloadUrl + "server-release.jar";
+
+        if (version > Version.MinVersionWithNewBuildName)
+            return downloadUrl + "Mindustry.jar";
+
+        return downloadUrl + "desktop-release.jar";
+    }
+
     public static async Task<bool> DownloadVersion(string path, Version version, bool downloadServer = false)
     {
         try
         {
-            HttpResponseMessage response = await httpClient.GetAsync(MindustryReleasesUrl +
-                                                                 (downloadServer
-                                                                     ? $"/download/v{version}/server-release.jar"
-                                                                     : $"/download/v{version}/Mindustry.jar")
-            );
+            string downloadUrl = GetDownloadUrl(version, downloadServer);
+            HttpResponseMessage response = await httpClient.GetAsync(downloadUrl);
 
             FileStream fileStream = File.Open(path, FileMode.Create);
 

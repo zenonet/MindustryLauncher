@@ -208,7 +208,14 @@ namespace MindustryLauncher
             if (SelectedInstance is LocalClientInstance instance)
             {
                 // TODO: Fix the icon loading preventing the deletion of the instance because the icon is still loaded
-                InstanceIconLarge.Source = new Bitmap(Path.Join(instance.Path, "icon.ico"));
+                try
+                {
+                    InstanceIconLarge.Source = new Bitmap(Path.Join(instance.Path, "icon.ico"));
+                }
+                catch
+                {
+                    InstanceIconLarge.Source = null;
+                }
             }
             else
             {

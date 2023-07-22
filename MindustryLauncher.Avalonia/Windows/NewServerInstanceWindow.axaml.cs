@@ -26,6 +26,8 @@ public partial class NewServerInstanceWindow : Window
         
         Local_CreateButton.Click += OnLocalCreateButtonClicked;
         RemoteDocker_CreateButton.Click += OnRemoteDockerCreateButtonClicked;
+
+        RemoteDocker_TabItem.IsVisible = false;
     }
 
 
