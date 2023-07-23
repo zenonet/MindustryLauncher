@@ -67,7 +67,7 @@ public partial class MindustryVersionComboBox : UserControl
             });
         }
 
-        if (!AllowShowingMoreVersions)
+        if (!AllowShowingMoreVersions || versionsInDropdown.Any(x => Version.Parse(x.Content.ToString()) == Version.MinVersionWithBuild))
             return;
 
         Button button = new()

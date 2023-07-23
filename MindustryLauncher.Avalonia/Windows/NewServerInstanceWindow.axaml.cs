@@ -15,19 +15,14 @@ public partial class NewServerInstanceWindow : Window
 #if DEBUG
         this.AttachDevTools();
 #endif
-
-        
-        versionsInDropdown = new();
-        LoadAvailableVersions();
-
-        
-        Local_VersionDropDown.ItemsSource = versionsInDropdown;
-        RemoteDocker_VersionDropDown.ItemsSource = versionsInDropdown;
         
         Local_CreateButton.Click += OnLocalCreateButtonClicked;
         RemoteDocker_CreateButton.Click += OnRemoteDockerCreateButtonClicked;
 
         RemoteDocker_TabItem.IsVisible = false;
+        //RemoteDocker_VersionDropDown.LoadVersions(10);
+        
+        Local_VersionDropDown.LoadVersions(10);
     }
 
 
@@ -40,7 +35,7 @@ public partial class NewServerInstanceWindow : Window
             return;
         }
         
-        InstanceManager.CreateLocalServerInstance(Local_InstanceName.Text!, Version.Parse(((ComboBoxItem) Local_VersionDropDown.SelectedItem!).Content!.ToString()!));
+        InstanceManager.CreateLocalServerInstance(Local_InstanceName.Text!, Local_VersionDropDown.SelectedVersion!.Value);
         this.Close();
     }
     
@@ -52,27 +47,10 @@ public partial class NewServerInstanceWindow : Window
         i.Usernsame = RemoteDocker_SshUserName.Text!;
         i.Password = RemoteDocker_SshPassword.Text!;
         i.ContainerName = RemoteDocker_ContainerName.Text!;
-        i.Version = Version.Parse(((ComboBoxItem)RemoteDocker_VersionDropDown.SelectedItem!).Content!.ToString()!);
+        i.Version = RemoteDocker_VersionDropDown.SelectedVersion!.Value;
         
         InstanceManager.Instances.Add(i);
         MainWindow.MainWindowInstance.UpdateInstanceList();
         this.Close();
-    }
-    
-    private ObservableCollection<ComboBoxItem> versionsInDropdown;
-
-    private void LoadAvailableVersions()
-    {
-        Version[] versions = MindustryDownloader.GetVersions(10);
-
-        versionsInDropdown.Clear();
-
-        foreach (Version v in versions)
-        {
-            versionsInDropdown.Add(new()
-            {
-                Content = v.ToString(),
-            });
-        }
     }
 }

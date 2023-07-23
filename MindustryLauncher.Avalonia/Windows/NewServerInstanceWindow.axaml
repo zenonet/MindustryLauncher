@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:userControls="clr-namespace:MindustryLauncher.Avalonia.UserControls"
     mc:Ignorable="d"
     Title="Create new Instance" Height="450" Width="800"
     RequestedThemeVariant="Light"
@@ -42,7 +43,7 @@
                         <TextBox Name="Local_InstanceName" />
 
                         <Label>Version:</Label>
-                        <ComboBox Name="Local_VersionDropDown" Width="200" HorizontalAlignment="Left" />
+                        <userControls:MindustryVersionComboBox Name="Local_VersionDropDown" Width="200" HorizontalAlignment="Left" />
 
                         <Button Name="Local_CreateButton">
                             Create
@@ -77,7 +78,7 @@
                         <TextBox Name="RemoteDocker_ContainerName" />
 
                         <Label>Version:</Label>
-                        <ComboBox Name="RemoteDocker_VersionDropDown" Width="200" HorizontalAlignment="Left" />
+                        <userControls:MindustryVersionComboBox Name="RemoteDocker_VersionDropDown" Width="200" HorizontalAlignment="Left" />
 
                         <Button Name="RemoteDocker_CreateButton" Margin="0, 20, 0, 0" Width="75"
                                 HorizontalAlignment="Left"

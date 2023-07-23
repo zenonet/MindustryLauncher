@@ -13,11 +13,8 @@ namespace MindustryLauncher;
 public static class InstanceManager
 {
     public static List<Instance> Instances { get; private set; }
-
-
-    private static string GetDataPath() => $"{LauncherPath()}/mindustrylauncher.json";
-
-    private static string LauncherPath() => "MindustryLauncher";
+    
+    private static string GetDataPath() => $"{Program.LauncherPath()}/mindustrylauncher.json";
 
     public static void LoadInstances()
     {
@@ -44,7 +41,7 @@ public static class InstanceManager
 
     public static void Save()
     {
-        Directory.CreateDirectory(LauncherPath());
+        Directory.CreateDirectory(Program.LauncherPath());
 
         string dataString = JsonConvert.SerializeObject(
             new InstanceData
@@ -63,7 +60,7 @@ public static class InstanceManager
 
     public static void CreateInstance(string instanceName, Version version)
     {
-        string instancePath = Path.Join(LauncherPath(), "instances", instanceName);
+        string instancePath = Path.Join(Program.LauncherPath(), "instances", instanceName);
         Directory.CreateDirectory(instancePath);
         MindustryDownloader.DownloadVersion(Path.Join(instancePath, "mindustry.jar"), version).ContinueWith(downloadTask =>
         {
@@ -88,7 +85,7 @@ public static class InstanceManager
 
     public static void CreateLocalServerInstance(string instanceName, Version version)
     {
-        string instancePath = Path.Join(LauncherPath(), "instances", instanceName);
+        string instancePath = Path.Join(Program.LauncherPath(), "instances", instanceName);
         Directory.CreateDirectory(instancePath);
         MindustryDownloader.DownloadVersion(Path.Join(instancePath, "mindustry-server.jar"), version, true).ContinueWith(OnInstanceDownloaded);
 
