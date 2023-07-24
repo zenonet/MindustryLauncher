@@ -14,6 +14,10 @@
         <entry key="MindustryLauncher.Avalonia/MindustryLauncherStyles.axaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.csproj" />
         <entry key="MindustryLauncher.Avalonia/NewInstanceWindow.axaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.csproj" />
         <entry key="MindustryLauncher.Avalonia/NewInstanceWindow.xaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.csproj" />
+        <entry key="MindustryLauncher.Avalonia/UserControls/InstanceListBoxItem.axaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.csproj" />
+        <entry key="MindustryLauncher.Avalonia/UserControls/MindustryVersionComboBox.axaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.csproj" />
+        <entry key="MindustryLauncher.Avalonia/Windows/NewInstanceWindow.axaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.csproj" />
+        <entry key="MindustryLauncher.Avalonia/Windows/NewServerInstanceWindow.axaml" value="MindustryLauncher.Avalonia/MindustryLauncher.Avalonia.csproj" />
       </map>
     </option>
   </component>
