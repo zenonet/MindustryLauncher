@@ -51,7 +51,8 @@ public static class InstanceManager
             Formatting.Indented,
             new JsonSerializerSettings
             {
-                TypeNameHandling = TypeNameHandling.Auto
+                TypeNameHandling = TypeNameHandling.Auto,
+                Formatting = Formatting.None,
             }
         );
 
