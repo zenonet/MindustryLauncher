@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using System;
+using System.IO;
 
 namespace MindustryLauncher.Avalonia;
 
@@ -18,5 +19,20 @@ internal static class Program
             .UsePlatformDetect()
             .LogToTrace();
 
-    public static string LauncherPath() => "MindustryLauncher";
+    private static bool launcherPathChecked = false;
+
+    private const string launcherPath = "MindustryLauncher";
+
+    public static string LauncherPath()
+    {
+        if (!launcherPathChecked)
+        {
+            if (!Directory.Exists(launcherPath))
+            {
+                Directory.CreateDirectory(launcherPath);
+            }
+        }
+
+        return launcherPath;
+    }
 }
