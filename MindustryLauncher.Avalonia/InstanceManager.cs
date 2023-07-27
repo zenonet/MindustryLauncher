@@ -14,7 +14,7 @@ public static class InstanceManager
 {
     public static List<Instance> Instances { get; private set; }
     
-    private static string GetDataPath() => $"{Program.LauncherPath()}/mindustrylauncher.json";
+    public static string GetDataPath() => $"{Program.LauncherPath()}/mindustrylauncher.json";
 
     public static void LoadInstances()
     {
