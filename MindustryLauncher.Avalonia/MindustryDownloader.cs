@@ -56,7 +56,8 @@ public static class MindustryDownloader
 
         string result = task.Result.Content.ReadAsStringAsync().Result;
 
-        MatchCollection matches = Regex.Matches(result, "<a href=\"\\/Anuken\\/Mindustry\\/releases\\/tag\\/v(\\d+(?:\\.\\d+)?)\" .*?>v\\1<\\/a>");
+        MatchCollection matches = Regex.Matches(result,
+            "<a href=\"\\/Anuken\\/Mindustry\\/releases\\/tag\\/v(\\d+(?:\\.\\d+)?)\" .*?>v\\1<\\/a>");
 
         Version[] versions = new Version[matches.Count];
 
@@ -103,5 +104,18 @@ public static class MindustryDownloader
         {
             return false;
         }
+    }
+
+    public static int GetVersionCount()
+    {
+        Task<HttpResponseMessage> task = httpClient.GetAsync("https://github.com/Anuken/Mindustry/");
+        task.Wait();
+
+        string result = task.Result.Content.ReadAsStringAsync().Result;
+
+        Match match = Regex.Match(result,
+            "Releases\\s.*?title=\"(\\d+)");
+
+        return int.Parse(match.Groups[1].Value);
     }
 }
