@@ -100,8 +100,10 @@ namespace MindustryLauncher
         {
             if (SelectedInstance is not IFolderOpenable instance)
                 return;
-
+            
             string mindustryPath = Path.Join(instance.Path, "Mindustry");
+            if(!Directory.Exists(mindustryPath))
+                Directory.CreateDirectory(mindustryPath);
 
             using Process folderOpener = new();
             folderOpener.StartInfo.FileName = mindustryPath;
@@ -111,7 +113,7 @@ namespace MindustryLauncher
 
         private void DeleteInstance(object? sender, RoutedEventArgs e)
         {
-            // Buffer the selected instance in case another is seleted
+            // Buffer the selected instance in case another is selected
             Instance i = SelectedInstance!;
             // Create a msg box
             IMsBox<ButtonResult>? confirmationBox = MessageBoxManager.GetMessageBoxStandard(new()
