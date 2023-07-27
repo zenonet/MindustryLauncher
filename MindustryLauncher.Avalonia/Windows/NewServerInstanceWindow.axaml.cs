@@ -22,7 +22,7 @@ public partial class NewServerInstanceWindow : Window
         RemoteDocker_TabItem.IsVisible = false;
         //RemoteDocker_VersionDropDown.LoadVersions(10);
         
-        Local_VersionDropDown.LoadVersions(10);
+        Local_VersionDropDown.LoadVersions();
     }
 
 

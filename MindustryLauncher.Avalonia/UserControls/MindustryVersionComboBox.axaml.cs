@@ -12,7 +12,8 @@ public partial class MindustryVersionComboBox : UserControl
 
     private bool AllowShowingMoreVersions { get; set; } = true;
 
-    public Version? SelectedVersion => Version.Parse(((ComboBoxItem) VersionDropDown.SelectedItem!).Content!.ToString()!);
+    public Version? SelectedVersion =>
+        Version.Parse(((ComboBoxItem) VersionDropDown.SelectedItem!).Content!.ToString()!);
 
     public MindustryVersionComboBox(IEnumerable<Version> versions)
     {
@@ -26,22 +27,14 @@ public partial class MindustryVersionComboBox : UserControl
     private void Init()
     {
         VersionDropDown.ItemsSource = versionsInDropdown;
-        /*
-        VersionDropDown.SelectionChanged += (_, args) =>
-        {
-            if (ReferenceEquals(versionsInDropdown[^1], VersionDropDown.SelectedItem))
-            {
-                versionsInDropdown[^1].Focus();
-                VersionDropDown.IsDropDownOpen = true;
-            }
-        };*/
     }
 
-    public void LoadVersions(int count, bool clearOld = true)
+    public void LoadVersions()
     {
-        AllowShowingMoreVersions = true;
-        Version[] versions = MindustryDownloader.GetVersions(count);
-        LoadFromVersionEnumerable(versions, clearOld);
+        VersionCache.CheckForNewVersions();
+        Version[] versions = VersionCache.GetAllCachedVersions(); //MindustryDownloader.GetVersions(count);
+
+        LoadFromVersionEnumerable(versions);
 
         Init();
     }
@@ -66,7 +59,7 @@ public partial class MindustryVersionComboBox : UserControl
                 Content = v.ToString(),
             });
         }
-
+/*
         if (!AllowShowingMoreVersions || versionsInDropdown.Any(x => Version.Parse(x.Content.ToString()) == Version.MinVersionWithBuild))
             return;
 
@@ -79,9 +72,9 @@ public partial class MindustryVersionComboBox : UserControl
         {
             Content = button,
         };
-        versionsInDropdown.Add(loadMoreButton);
+        versionsInDropdown.Add(loadMoreButton);*/
     }
-
+/*
     private void OnLoadMore(object? sender, RoutedEventArgs routedEventArgs)
     {
         // Remove the more button
@@ -106,5 +99,5 @@ public partial class MindustryVersionComboBox : UserControl
         }
 
         LoadFromVersionEnumerable(nextVersions, false);
-    }
+    }*/
 }

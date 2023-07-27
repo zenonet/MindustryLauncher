@@ -12,7 +12,7 @@ public partial class NewInstanceWindow : Window
         
         CreateButton.Click += CreateInstance;
         
-        VersionComboBox.LoadVersions(10);
+        VersionComboBox.LoadVersions();
     }
 
     private void CreateInstance(object? sender, RoutedEventArgs e)
