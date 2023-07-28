@@ -25,7 +25,7 @@ public static class VersionCache
         }
     }
 
-    public static void CacheVersions(Version? until = null)
+    public static void CacheVersions(Version? until = null, Action<Version[]>? onProgressChanged = null)
     {
         Version? after = null;
 
@@ -39,6 +39,8 @@ public static class VersionCache
                 break;
 
             after = versionsOnPage[^1];
+
+            onProgressChanged?.Invoke(versionsOnPage);
 
             foreach (Version version in versionsOnPage)
             {
@@ -74,7 +76,7 @@ public static class VersionCache
     {
         if (!File.Exists(CachePath))
             CacheVersions();
-        
+
         string rawCache = File.ReadAllText(CachePath);
         string[] versionStrings = rawCache.Split(';', StringSplitOptions.RemoveEmptyEntries);
         Version[] versions = new Version[versionStrings.Length];
