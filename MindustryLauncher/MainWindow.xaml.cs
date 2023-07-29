@@ -18,19 +18,19 @@ namespace MindustryLauncher
         {
             get
             {
-                if (InstanceManager.Instances.Contains(selectedInstance))
+                if (DataManager.Data.Instances.Contains(selectedInstance))
                     return selectedInstance;
 
-                if (InstanceManager.Instances.Count <= 0)
+                if (DataManager.Data.Instances.Count <= 0)
                     return null;
 
-                selectedInstance = InstanceManager.Instances[0];
+                selectedInstance = DataManager.Data.Instances[0];
                 return selectedInstance;
             }
             set
             {
                 if (value == null)
-                    selectedInstance = InstanceManager.Instances[(InstanceManager.Instances.IndexOf(selectedInstance) + 1) % InstanceManager.Instances.Count];
+                    selectedInstance = DataManager.Data.Instances[(DataManager.Data.Instances.IndexOf(selectedInstance) + 1) % DataManager.Data.Instances.Count];
                 else
                     selectedInstance = value;
             }
@@ -84,10 +84,10 @@ namespace MindustryLauncher
             {
                 InstanceList.Items.Clear();
 
-                if (SelectedInstance != null && !InstanceManager.Instances.Contains(SelectedInstance))
+                if (SelectedInstance != null && !DataManager.Data.Instances.Contains(SelectedInstance))
                     SelectedInstance = null;
             
-                foreach (Instance i in InstanceManager.Instances)
+                foreach (Instance i in DataManager.Data.Instances)
                 {
                     InstanceListViewItem listViewItem = new(i);
                     InstanceList.Items.Add(listViewItem);

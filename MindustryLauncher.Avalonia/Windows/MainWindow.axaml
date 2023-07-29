@@ -2,10 +2,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:MindustryLauncher.Avalonia.Models"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="MindustryLauncher.MainWindow"
         RequestedThemeVariant="Light"
+        x:DataType="models:MainWindowViewModel"
         Title="MindustryLauncher.Avalonia">
+    <Window.DataContext>
+        <models:MainWindowViewModel />
+    </Window.DataContext>
     <Grid>
 
         <Grid.ColumnDefinitions>
@@ -18,7 +23,8 @@
         </Grid.RowDefinitions>
         <ListBox Name="InstanceList" />
         <StackPanel Name="InstanceOptionsStackPanel" Grid.Column="1" Grid.Row="0" Orientation="Vertical"
-                    HorizontalAlignment="Center">
+                    HorizontalAlignment="Center"
+                    IsEnabled="{Binding IsAnyInstanceSelected}">
             <StackPanel.Styles>
                 <Style Selector="Button">
                     <Setter Property="FontFamily" Value="Calibri" />
@@ -29,26 +35,27 @@
                 </Style>
             </StackPanel.Styles>
             <Image Name="InstanceIconLarge" Height="100" Width="100"></Image>
-            <TextBlock TextAlignment="Center" FontSize="15" Name="InstanceName">Main</TextBlock>
-            <TextBlock TextAlignment="Center" FontSize="12" Name="InstanceVersion">145.1</TextBlock>
-            <Button Name="RunButton">Run</Button>
+            <TextBlock TextAlignment="Center" FontSize="15" Name="InstanceName" Text="{Binding SelectedInstance.Name}" />
+            <TextBlock TextAlignment="Center" FontSize="12" Name="InstanceVersion"
+                       Text="{Binding SelectedInstance.Version}" />
+            <Button Name="RunButton" Command="{Binding StartStopSelectedInstance}">Run</Button>
             <Button Name="OpenMindustryFolderButton">Mindustry folder</Button>
             <Button Name="OpenServerWindowButton" IsVisible="False">Server Management</Button>
-            <Button Name="DeleteInstanceButton">Delete</Button>
+            <Button Name="DeleteInstanceButton" Command="{Binding SelectedInstance.DeleteInstance}">Delete</Button>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1">
-            <Button Name="AddInstanceButton" 
-                    Margin="10" 
-                    Width="110" 
+            <Button Name="AddInstanceButton"
+                    Margin="10"
+                    Width="110"
                     Height="30"
                     HorizontalAlignment="Left"
                     HorizontalContentAlignment="Center">
                 Add Instance
             </Button>
-            <Button Name="AddServerInstanceButton" 
-                    Margin="10" 
-                    Width="140" 
+            <Button Name="AddServerInstanceButton"
+                    Margin="10"
+                    Width="140"
                     Height="30"
                     HorizontalAlignment="Left"
                     HorizontalContentAlignment="Center">

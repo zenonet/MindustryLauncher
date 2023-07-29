@@ -49,7 +49,7 @@ public partial class NewServerInstanceWindow : Window
         i.ContainerName = RemoteDocker_ContainerName.Text!;
         i.Version = RemoteDocker_VersionDropDown.SelectedVersion!.Value;
         
-        InstanceManager.Instances.Add(i);
+        DataManager.Data.Instances.Add(i);
         MainWindow.MainWindowInstance.UpdateInstanceList();
         this.Close();
     }

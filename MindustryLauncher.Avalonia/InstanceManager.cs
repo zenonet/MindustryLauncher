@@ -12,53 +12,9 @@ namespace MindustryLauncher;
 
 public static class InstanceManager
 {
-    public static List<Instance> Instances { get; private set; }
     
     public static string GetDataPath() => $"{Program.LauncherPath()}/mindustrylauncher.json";
-
-    public static void LoadInstances()
-    {
-        if (!File.Exists(GetDataPath()))
-        {
-            Instances = new();
-            return;
-        }
-
-        string dataText = File.ReadAllText(GetDataPath());
-        InstanceData? instanceData = JsonConvert.DeserializeObject<InstanceData>(dataText, new JsonSerializerSettings
-        {
-            TypeNameHandling = TypeNameHandling.Auto
-        });
-
-        if (instanceData == null)
-        {
-            Console.WriteLine("Unable to load instances: invalid file");
-            return;
-        }
-
-        Instances = instanceData.Instances.ToList();
-    }
-
-    public static void Save()
-    {
-        Directory.CreateDirectory(Program.LauncherPath());
-
-        string dataString = JsonConvert.SerializeObject(
-            new InstanceData
-            {
-                Instances = Instances.ToArray(),
-            },
-            Formatting.Indented,
-            new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.Auto,
-                Formatting = Formatting.None,
-            }
-        );
-
-        File.WriteAllText(GetDataPath(), dataString);
-    }
-
+    
     public static void CreateInstance(string instanceName, Version version)
     {
         string instancePath = Path.Join(Program.LauncherPath(), "instances", instanceName);
@@ -81,7 +37,7 @@ public static class InstanceManager
             Path = instancePath,
         };
 
-        Instances.Add(instance);
+        DataManager.Data.Instances.Add(instance);
     }
 
     public static void CreateLocalServerInstance(string instanceName, Version version)
@@ -100,7 +56,7 @@ public static class InstanceManager
             Path = instancePath,
         };
 
-        Instances.Add(instance);
+        DataManager.Data.Instances.Add(instance);
     }
 
     private static void ExtractIcon(string instancePath)

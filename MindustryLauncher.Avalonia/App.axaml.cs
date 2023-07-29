@@ -16,9 +16,10 @@ public partial class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {            
+        {
             if (File.Exists(InstanceManager.GetDataPath()))
             {
+                DataManager.Load();
                 desktop.MainWindow = new MainWindow();
             }
             else

@@ -123,7 +123,7 @@ public partial class SetupWindow : Window
 
     void OnFinishButtonClicked()
     {
-        InstanceManager.Save();
+        DataManager.Save();
 
         // Open the actual launcher and close the setup window
         var lifetime =

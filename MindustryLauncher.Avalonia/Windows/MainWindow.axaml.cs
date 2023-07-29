@@ -7,6 +7,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using MessageBox.Avalonia.Enums;
 using MindustryLauncher.Avalonia;
+using MindustryLauncher.Avalonia.Models;
 using MindustryLauncher.Avalonia.Windows;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Base;
@@ -19,54 +20,19 @@ namespace MindustryLauncher
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Instance? selectedInstance;
-
-        public Instance? SelectedInstance
-        {
-            get
-            {
-                if (InstanceManager.Instances.Contains(selectedInstance))
-                    return selectedInstance;
-
-                if (InstanceManager.Instances.Count <= 0)
-                    return null;
-
-                selectedInstance = InstanceManager.Instances[0];
-                return selectedInstance;
-            }
-            set
-            {
-                if (value == null)
-                {
-                    //int nextInstanceIndex = (InstanceManager.Instances.IndexOf(selectedInstance) + 1) % InstanceManager.Instances.Count;
-
-                    selectedInstance = InstanceManager.Instances.Count > 0
-                        ? InstanceManager.Instances[0]
-                        : null;
-                }
-                else
-                    selectedInstance = value;
-
-
-                InstanceOptionsStackPanel.IsEnabled = selectedInstance != null;
-            }
-        }
-
         public static MainWindow MainWindowInstance = null!;
 
         public ObservableCollection<InstanceListBoxItem> ListBoxItems { get; } = new();
 
+        public MainWindowViewModel Data => (DataContext as MainWindowViewModel)!;
         public MainWindow()
         {
             MainWindowInstance = this;
             InitializeComponent();
 
-            InstanceManager.LoadInstances();
             UpdateInstanceList();
-
-
+            
             InstanceList.SelectionChanged += OnSelectionChanged;
-            RunButton.Click += HandleRunButtonClick;
             DeleteInstanceButton.Click += DeleteInstance;
             AddInstanceButton.Click += AddInstance;
             AddServerInstanceButton.Click += AddServerInstance;
@@ -81,24 +47,24 @@ namespace MindustryLauncher
             {
                 goto openServerManagementWindow;
             }
-            if (serverManagementWindow.Server == selectedInstance)
+            if (serverManagementWindow.Server == Data.SelectedInstance)
             {
                 return;
             }
 
-            if (serverManagementWindow.Server != SelectedInstance)
+            if (serverManagementWindow.Server != Data.SelectedInstance)
             {
                 serverManagementWindow.Close();
             }
 
             openServerManagementWindow:
-            serverManagementWindow = new((ServerInstance) SelectedInstance!);
+            serverManagementWindow = new((ServerInstance) Data.SelectedInstance!);
             serverManagementWindow.Show();
         }
 
         private void OpenMindustryFolder(object? sender, RoutedEventArgs e)
         {
-            if (SelectedInstance is not IFolderOpenable instance)
+            if (Data.SelectedInstance is not IFolderOpenable instance)
                 return;
             
             string mindustryPath = Path.Join(instance.Path, "Mindustry");
@@ -110,17 +76,16 @@ namespace MindustryLauncher
             folderOpener.StartInfo.UseShellExecute = true;
             folderOpener.Start();
         }
-
         private void DeleteInstance(object? sender, RoutedEventArgs e)
         {
             // Buffer the selected instance in case another is selected
-            Instance i = SelectedInstance!;
+            Instance i = Data.SelectedInstance!;
             // Create a msg box
             IMsBox<ButtonResult>? confirmationBox = MessageBoxManager.GetMessageBoxStandard(new()
             {
                 ButtonDefinitions = ButtonEnum.OkCancel,
                 ContentTitle = "Are you sure?",
-                ContentMessage = $"This will delete the instance {SelectedInstance!.Name} and all its files.\nThis action is not undoable",
+                ContentMessage = $"This will delete the instance {Data.SelectedInstance!.Name} and all its files.\nThis action is not undoable",
                 Topmost = true,
             });
             confirmationBox.ShowWindowAsync().ContinueWith(result =>
@@ -130,7 +95,7 @@ namespace MindustryLauncher
                     if (result.Result != ButtonResult.Ok)
                         return;
 
-                    if (selectedInstance == i && InstanceIconLarge.Source is Bitmap b)
+                    if (Data.SelectedInstance == i && InstanceIconLarge.Source is Bitmap b)
                     {
                         // Allow deletion of the instance by closing the icon
                         b.Dispose();
@@ -145,7 +110,7 @@ namespace MindustryLauncher
 
         protected override void OnClosing(WindowClosingEventArgs e)
         {
-            InstanceManager.Save();
+            DataManager.Save();
         }
 
         private void AddInstance(object? sender, RoutedEventArgs e)
@@ -166,48 +131,38 @@ namespace MindustryLauncher
             {
                 ListBoxItems.Clear();
 
-                if (SelectedInstance != null && !InstanceManager.Instances.Contains(SelectedInstance))
-                    SelectedInstance = null;
+                if (Data.SelectedInstance != null && !DataManager.Data.Instances.Contains(Data.SelectedInstance))
+                    Data.SelectedInstance = null;
 
-                foreach (Instance i in InstanceManager.Instances)
+                foreach (Instance i in DataManager.Data.Instances)
                 {
                     InstanceListBoxItem listViewItem = new(i);
                     ListBoxItems.Add(listViewItem);
 
-                    if (i == SelectedInstance)
+                    if (i == Data.SelectedInstance)
                         InstanceList.SelectedItem = listViewItem;
                 }
 
                 InstanceList.ItemsSource = ListBoxItems;
             });
         }
-
-        private void HandleRunButtonClick(object? sender, RoutedEventArgs e)
-        {
-            if (SelectedInstance == null)
-                return;
-
-            if (SelectedInstance.IsRunning)
-                SelectedInstance.Kill();
-            else
-                SelectedInstance?.Run();
-        }
-
+        
         private void OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             SetRunButtonText();
 
-            if (SelectedInstance != null)
+            if (Data.SelectedInstance != null)
             {
-                SelectedInstance.InstanceStarted -= SetStopButtonText;
-                SelectedInstance.InstanceExited -= SetRunButtonText;
+                Data.SelectedInstance.InstanceStarted -= SetStopButtonText;
+                Data.SelectedInstance.InstanceExited -= SetRunButtonText;
             }
 
-            SelectedInstance = ((InstanceListBoxItem) InstanceList.SelectedItem!).Instance;
-            InstanceName.Text = SelectedInstance.Name;
-            InstanceVersion.Text = SelectedInstance.Version.ToString();
+            
+            Data.SelectedInstance = ((InstanceListBoxItem) InstanceList.SelectedItem!).Instance;
+            //InstanceName.Text = Data.SelectedInstance.Name;
+            //InstanceVersion.Text = Data.SelectedInstance.Version.ToString();
 
-            if (SelectedInstance is LocalClientInstance instance)
+            if (Data.SelectedInstance is LocalClientInstance instance)
             {
                 try
                 {
@@ -228,20 +183,20 @@ namespace MindustryLauncher
             }
 
             // Update the text on the run button according to the instances status
-            SelectedInstance.InstanceStarted += SetStopButtonText;
-            SelectedInstance.InstanceExited += SetRunButtonText;
+            Data.SelectedInstance.InstanceStarted += SetStopButtonText;
+            Data.SelectedInstance.InstanceExited += SetRunButtonText;
 
-            if (SelectedInstance.IsRunning)
+            if (Data.SelectedInstance.IsRunning)
                 SetStopButtonText();
 
-            OpenServerWindowButton.IsVisible = SelectedInstance is ServerInstance;
+            OpenServerWindowButton.IsVisible = Data.SelectedInstance is ServerInstance;
         }
 
         private void SetRunButtonText(object? sender = null, int _2 = 0)
         {
             Dispatcher.UIThread.InvokeAsync(() =>
             {
-                if (sender == null || sender == SelectedInstance)
+                if (sender == null || sender == Data.SelectedInstance)
                     RunButton.Content = "Run";
             });
         }
@@ -250,7 +205,7 @@ namespace MindustryLauncher
         {
             Dispatcher.UIThread.InvokeAsync(() =>
             {
-                if (sender == null || sender == SelectedInstance)
+                if (sender == null || sender == Data.SelectedInstance)
                     RunButton.Content = "Stop";
             });
         }

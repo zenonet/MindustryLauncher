@@ -58,7 +58,7 @@ public class LocalClientInstance : Instance, IFolderOpenable
     public override void DeleteInstance()
     {
         Directory.Delete(Path, true);
-        InstanceManager.Instances.Remove(this);
+        DataManager.Data.Instances.Remove(this);
         MainWindow.MainWindowInstance.UpdateInstanceList();
     }
 
