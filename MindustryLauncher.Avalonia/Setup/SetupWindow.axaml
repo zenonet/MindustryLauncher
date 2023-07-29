@@ -1,0 +1,70 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="MindustryLauncher.Avalonia.Setup.SetupWindow"
+        Title="SetupWindow">
+    <Grid RowDefinitions="40,*">
+        <Grid.Styles>
+            <Style Selector="TextBlock">
+                <Setter Property="FontSize" Value="24" />
+                <Setter Property="Margin" Value="10" />
+                <Setter Property="TextAlignment" Value="Center" />
+            </Style>
+            <Style Selector="RadioButton">
+                <Setter Property="Margin" Value="50, 0, 50, 0" />
+            </Style>
+        </Grid.Styles>
+        <Carousel Grid.Row="1" Name="Carousel" SelectedIndex="2">
+            <Carousel.PageTransition>
+                <CompositePageTransition>
+                    <PageSlide Duration="0:00:0.300" Orientation="Horizontal" />
+                </CompositePageTransition>
+            </Carousel.PageTransition>
+            <Carousel.Items>
+                <StackPanel Name="WelcomePage">
+                    <TextBlock>
+                        Welcome to Mindustry Launcher!<LineBreak />
+                        Before you start, we need to set up some things.
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Name="VersionCachingPage">
+                    <TextBlock>
+                        Getting the list of all mindustry versions ...
+                    </TextBlock>
+                    <ProgressBar
+                        Name="CachingProgressBar"
+                        Orientation="Horizontal"
+                        Width="400"
+                        Height="10"
+                        Foreground="DodgerBlue"
+                        Background="LightGray"
+                        Margin="20">
+                        <ProgressBar.Transitions>
+                            <Transitions>
+
+                                <DoubleTransition Property="Value" Duration="0:0:0.1" />
+                            </Transitions>
+                        </ProgressBar.Transitions>
+                    </ProgressBar>
+                </StackPanel>
+                <StackPanel Name="JavaSelectionPage">
+                    <TextBlock>
+                        Mindustry requires java to run, so you need to select a java version.
+                    </TextBlock>
+                    <RadioButton Name="JavaFromPathRadioButton" GroupName="JavaSelection">Use Java runtime from the PATH environment variable.</RadioButton>
+                    <RadioButton Name="JavaFromCustomPathRadioButton" GroupName="JavaSelection">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock FontSize="14" VerticalAlignment="Center" Margin="0">Use a custom Java runtime</TextBlock>
+                            <TextBox Name="JavaPathTextBox" Height="18" Width="200"  Margin="10, 0, 5, 0" FontSize="12"></TextBox>
+                            <Button Name="JavaChooseFileButton" Margin="5, 0, 10, 0" FontSize="12" Height="28">Choose File</Button>
+                        </StackPanel>
+                    </RadioButton>
+                </StackPanel>
+            </Carousel.Items>
+        </Carousel>
+        <Button Grid.Row="1" Name="NextPageButton" Content="Next" VerticalAlignment="Bottom"
+                HorizontalAlignment="Right" Margin="20" FontSize="15" />
+    </Grid>
+</Window>

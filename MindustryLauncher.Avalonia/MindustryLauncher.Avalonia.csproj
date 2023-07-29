@@ -45,5 +45,9 @@
         <DependentUpon>ServerManagementWindow.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="Setup\SetupWindow.axaml.cs">
+        <DependentUpon>SetupWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 </Project>
