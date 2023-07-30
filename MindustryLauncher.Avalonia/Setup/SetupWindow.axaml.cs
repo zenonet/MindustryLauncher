@@ -57,8 +57,8 @@ public partial class SetupWindow : Window
         switch (Carousel.SelectedIndex)
         {
             case 1:
-                //NextPageButton.IsEnabled = false;
-                //StartCachingVersions();
+                NextPageButton.IsEnabled = false;
+                StartCachingVersions();
                 break;
             case 2:
                 InitializeJavaSelectionPage();
