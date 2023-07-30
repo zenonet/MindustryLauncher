@@ -17,9 +17,10 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            DataManager.Load();
+
             if (File.Exists(InstanceManager.GetDataPath()))
             {
-                DataManager.Load();
                 desktop.MainWindow = new MainWindow();
             }
             else
