@@ -47,10 +47,23 @@ public partial class SetupWindow : Window
 
     private void OnNextPageButtonClicked(object? sender, RoutedEventArgs e)
     {
-        if (Carousel.SelectedIndex == Carousel.ItemCount - 1)
+        if (Carousel.SelectedItem == VersionCachingPage)
         {
             OnFinishButtonClicked();
             return;
+        }
+
+        // Set the java path to use
+        if (Carousel.SelectedItem == JavaSelectionPage)
+        {
+            string javaPath;
+            if (JavaFromPathRadioButton.IsChecked!.Value)
+                javaPath = "java";
+            else if (JavaFromCustomPathRadioButton.IsChecked!.Value)
+                javaPath = JavaPathTextBox.Text!;
+            else
+                throw new NotImplementedException("Uhm, this Radio button isn't implemented yet");
+            DataManager.Data.JavaPath = javaPath;
         }
 
         Carousel.Next();
@@ -80,7 +93,7 @@ public partial class SetupWindow : Window
             RedirectStandardOutput = true,
             RedirectStandardError = true,
             CreateNoWindow = true,
-            UseShellExecute = false
+            UseShellExecute = false,
         };
         try
         {
