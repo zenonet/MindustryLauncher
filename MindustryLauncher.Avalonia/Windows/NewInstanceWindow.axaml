@@ -38,7 +38,7 @@
             <TextBox Name="InstanceName"/>
             <Label HorizontalAlignment="Left">Version:</Label>
             <userControls:MindustryVersionComboBox Name="VersionComboBox" Width="200" HorizontalAlignment="Left" />
-            <Button Name="CreateButton">Create</Button>
+            <Button Name="CreateButton" IsDefault="True">Create</Button>
         </StackPanel>
     </Grid>
 </Window>

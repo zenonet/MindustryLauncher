@@ -45,7 +45,7 @@
                         <Label>Version:</Label>
                         <userControls:MindustryVersionComboBox Name="Local_VersionDropDown" Width="200" HorizontalAlignment="Left" />
 
-                        <Button Name="Local_CreateButton">
+                        <Button Name="Local_CreateButton" IsDefault="True">
                             Create
                         </Button>
                     </StackPanel>
@@ -82,7 +82,8 @@
 
                         <Button Name="RemoteDocker_CreateButton" Margin="0, 20, 0, 0" Width="75"
                                 HorizontalAlignment="Left"
-                                HorizontalContentAlignment="Center">
+                                HorizontalContentAlignment="Center"
+                                IsDefault="True">
                             Create
                         </Button>
                     </StackPanel>
