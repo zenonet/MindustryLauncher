@@ -15,7 +15,7 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="7*" />
-            <ColumnDefinition Width="140" />
+            <ColumnDefinition Width="160" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="8*"></RowDefinition>
@@ -47,7 +47,6 @@
         <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1">
             <Button Name="AddInstanceButton"
                     Margin="10"
-                    Width="110"
                     Height="30"
                     HorizontalAlignment="Left"
                     HorizontalContentAlignment="Center">
@@ -55,15 +54,12 @@
             </Button>
             <Button Name="AddServerInstanceButton"
                     Margin="10"
-                    Width="140"
                     Height="30"
                     HorizontalAlignment="Left"
                     HorizontalContentAlignment="Center">
                 Add Server Instance
             </Button>
-
         </StackPanel>
-
         <TextBlock Name="StatusText" Grid.Column="0" Grid.Row="1" Margin="10" HorizontalAlignment="Right"
                    TextAlignment="Center">
         </TextBlock>
