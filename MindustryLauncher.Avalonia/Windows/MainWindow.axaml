@@ -60,6 +60,21 @@
                 Add Server Instance
             </Button>
         </StackPanel>
+        <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button
+                Content="{Binding LatestVersion}"
+                Command="{Binding UpdateLatestVersionInfo}"
+                Background="White">
+                <ToolTip.Tip>
+                    <TextBlock>
+                        Latest Version
+                        <LineBreak />
+                        Click to Update
+                    </TextBlock>
+                </ToolTip.Tip>
+            </Button>
+
+        </StackPanel>
         <TextBlock Name="StatusText" Grid.Column="0" Grid.Row="1" Margin="10" HorizontalAlignment="Right"
                    TextAlignment="Center">
         </TextBlock>

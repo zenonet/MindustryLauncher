@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media.Imaging;
@@ -29,7 +30,8 @@ namespace MindustryLauncher
         {
             MainWindowInstance = this;
             InitializeComponent();
-
+            Data.UpdateLatestVersionInfo();
+            
             UpdateInstanceList();
             
             InstanceList.SelectionChanged += OnSelectionChanged;

@@ -72,7 +72,7 @@ public static class VersionCache
         return Versions![..];
     }
 
-    private static void LoadVersions()
+    public static void LoadVersions()
     {
         if (!File.Exists(CachePath))
             CacheVersions();
