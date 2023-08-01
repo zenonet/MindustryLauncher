@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Threading.Tasks;
 using MindustryLauncher.Avalonia;
 using MindustryLauncher.Avalonia.Instances;
-using Newtonsoft.Json;
 
 namespace MindustryLauncher;
 
@@ -26,8 +22,7 @@ public static class InstanceManager
             // Hand over the result of the download task to the next task
             return downloadTask.Result;
         }).ContinueWith(OnInstanceDownloaded);
-
-
+        
         MainWindow.MainWindowInstance.SetStatus($"Downloading mindustry v{version}...");
 
         LocalClientInstance instance = new()
@@ -38,6 +33,7 @@ public static class InstanceManager
         };
 
         DataManager.Data.Instances.Add(instance);
+        DataManager.Save();
     }
 
     public static void CreateLocalServerInstance(string instanceName, Version version)
@@ -57,6 +53,7 @@ public static class InstanceManager
         };
 
         DataManager.Data.Instances.Add(instance);
+        DataManager.Save();
     }
 
     private static void ExtractIcon(string instancePath)
