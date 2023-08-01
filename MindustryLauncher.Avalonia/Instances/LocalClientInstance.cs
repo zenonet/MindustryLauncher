@@ -36,6 +36,8 @@ public class LocalClientInstance : Instance, IFolderOpenable
         if (process is null || process.HasExited)
             return;
 
+        process.StandardOutput.ReadToEnd();
+
         process.EnableRaisingEvents = true;
 
         IsRunning = true;
