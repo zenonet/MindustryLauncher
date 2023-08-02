@@ -74,9 +74,13 @@
                 </ToolTip.Tip>
             </Button>
 
+<ProgressBar Value="{Binding ProgressValue}" IsVisible="{Binding ShowProgress}"/>
+            <TextBlock Margin="10" HorizontalAlignment="Right"
+                       VerticalAlignment="Center"
+                       TextAlignment="Center" 
+                       FlowDirection="LeftToRight"
+                       Text="{Binding StatusText}" />
         </StackPanel>
-        <TextBlock Name="StatusText" Grid.Column="0" Grid.Row="1" Margin="10" HorizontalAlignment="Right"
-                   TextAlignment="Center">
-        </TextBlock>
+
     </Grid>
 </Window>

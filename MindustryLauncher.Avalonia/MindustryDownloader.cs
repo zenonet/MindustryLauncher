@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Handlers;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using MindustryLauncher.Avalonia;
 
 namespace MindustryLauncher;
 
@@ -12,7 +14,9 @@ public static class MindustryDownloader
 {
     private const string MindustryReleasesUrl = "https://github.com/Anuken/Mindustry/releases";
 
-    private static readonly HttpClient httpClient = new();
+    private static readonly HttpClientHandler HttpClientHandler = new();
+    private static readonly ProgressMessageHandler ProgressHandler = new(HttpClientHandler);
+    private static readonly HttpClient HttpClient = new(HttpClientHandler);
 
     /// <summary>
     /// Gets a list of releases
@@ -51,7 +55,7 @@ public static class MindustryDownloader
                 ? "https://github.com/Anuken/Mindustry/tags"
                 : $"https://github.com/Anuken/Mindustry/tags?after=v{after}";
 
-        Task<HttpResponseMessage> task = httpClient.GetAsync(url);
+        Task<HttpResponseMessage> task = HttpClient.GetAsync(url);
         task.Wait();
 
         string result = task.Result.Content.ReadAsStringAsync().Result;
@@ -83,21 +87,18 @@ public static class MindustryDownloader
         return downloadUrl + "desktop-release.jar";
     }
 
+    private static void OnDownloadProgressChanged(float progress)
+    {
+        MainWindow.MainWindowInstance.Data.ProgressValue = progress;
+    }
+
     public static async Task<bool> DownloadVersion(string path, Version version, bool downloadServer = false)
     {
         try
         {
             string downloadUrl = GetDownloadUrl(version, downloadServer);
-            HttpResponseMessage response = await httpClient.GetAsync(downloadUrl);
-
-            FileStream fileStream = File.Open(path, FileMode.Create);
-
-            await response.Content.CopyToAsync(fileStream);
-
-            await fileStream.FlushAsync();
-
-            fileStream.Close();
-
+            await HttpClient.DownloadFile(downloadUrl, path, new Progress<float>(OnDownloadProgressChanged));
+            
             return true;
         }
         catch (Exception)
@@ -108,7 +109,7 @@ public static class MindustryDownloader
 
     public static int GetVersionCount()
     {
-        Task<HttpResponseMessage> task = httpClient.GetAsync("https://github.com/Anuken/Mindustry/");
+        Task<HttpResponseMessage> task = HttpClient.GetAsync("https://github.com/Anuken/Mindustry/");
         task.Wait();
 
         string result = task.Result.Content.ReadAsStringAsync().Result;

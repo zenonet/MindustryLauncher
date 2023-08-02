@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using MindustryLauncher.Avalonia;
 using MindustryLauncher.Avalonia.Instances;
 
@@ -23,7 +24,7 @@ public static class InstanceManager
             return downloadTask.Result;
         }).ContinueWith(OnInstanceDownloaded);
         
-        MainWindow.MainWindowInstance.SetStatus($"Downloading mindustry v{version}...");
+        Dispatcher.UIThread.InvokeAsync(() => MainWindow.MainWindowInstance.Data.StatusText = $"Downloading mindustry v{version}...");
 
         LocalClientInstance instance = new()
         {
@@ -43,7 +44,7 @@ public static class InstanceManager
         MindustryDownloader.DownloadVersion(Path.Join(instancePath, "mindustry-server.jar"), version, true).ContinueWith(OnInstanceDownloaded);
 
 
-        MainWindow.MainWindowInstance.SetStatus($"Downloading mindustry server v{version}...");
+        Dispatcher.UIThread.InvokeAsync(() => MainWindow.MainWindowInstance.Data.StatusText = $"Downloading mindustry server v{version}...");
 
         LocalServerInstance instance = new()
         {
@@ -84,7 +85,7 @@ public static class InstanceManager
     private static void OnInstanceDownloaded(Task<bool> task)
     {
         bool success = task.Result;
-        MainWindow.MainWindowInstance.SetStatus("");
+        Dispatcher.UIThread.InvokeAsync(() => MainWindow.MainWindowInstance.Data.StatusText = "");
         MainWindow.MainWindowInstance.UpdateInstanceList();
     }
 }

@@ -15,6 +15,15 @@ public partial class MainWindowViewModel : ObservableObject
 
     public Version LatestVersion => VersionCache.Versions[0];
     public bool IsAnyInstanceSelected => SelectedInstance != null;
+    
+    [ObservableProperty]
+    private string statusText = "";
+    
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(ShowProgress))]
+    private float progressValue;
+    
+    public bool ShowProgress => ProgressValue is > 0 and < 100;
 
     public string RunStopButtonText
     {

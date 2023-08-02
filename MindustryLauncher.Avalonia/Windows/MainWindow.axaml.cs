@@ -211,10 +211,5 @@ namespace MindustryLauncher
                     RunButton.Content = "Stop";
             });
         }
-
-        public void SetStatus(string s)
-        {
-            Dispatcher.UIThread.InvokeAsync(() => { StatusText.Text = s; });
-        }
     }
 }
