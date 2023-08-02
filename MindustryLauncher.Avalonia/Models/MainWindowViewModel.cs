@@ -35,18 +35,16 @@ public partial class MainWindowViewModel : ObservableObject
             SelectedInstance!.Run();
     }
 
-    private Task? updateLatestVersionTask;
-    [RelayCommand]
-    public void UpdateLatestVersionInfo()
+
+    [RelayCommand(AllowConcurrentExecutions = false)]
+    public async Task UpdateLatestVersionInfo()
     {
-        if(updateLatestVersionTask == null || updateLatestVersionTask.Status == TaskStatus.Running)
-            return;
-        updateLatestVersionTask = Task.Run(() =>
+        await Task.Run(() =>
         {
             VersionCache.CheckForNewVersions();
             VersionCache.LoadVersions();
-            Dispatcher.UIThread.InvokeAsync(() =>
-                    OnPropertyChanged(nameof(LatestVersion)));
+
+            OnPropertyChanged(nameof(LatestVersion));
         });
     }
 }
