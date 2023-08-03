@@ -38,7 +38,7 @@
             <TextBlock TextAlignment="Center" FontSize="15" Name="InstanceName" Text="{Binding SelectedInstance.Name}" />
             <TextBlock TextAlignment="Center" FontSize="12" Name="InstanceVersion"
                        Text="{Binding SelectedInstance.Version}" />
-            <Button Name="RunButton" Command="{Binding StartStopSelectedInstance}">Run</Button>
+            <Button Name="RunButton" Command="{Binding StartStopSelectedInstance}" Content="Run"/>
             <Button Name="OpenMindustryFolderButton">Mindustry folder</Button>
             <Button Name="OpenServerWindowButton" IsVisible="False">Server Management</Button>
             <Button Name="DeleteInstanceButton" Command="{Binding SelectedInstance.DeleteInstance}">Delete</Button>
@@ -74,7 +74,8 @@
                 </ToolTip.Tip>
             </Button>
 
-<ProgressBar Value="{Binding ProgressValue}" IsVisible="{Binding ShowProgress}"/>
+<ProgressBar Value="{Binding ProgressValue}" IsVisible="{Binding ShowProgress}"
+             FlowDirection="LeftToRight"/>
             <TextBlock Margin="10" HorizontalAlignment="Right"
                        VerticalAlignment="Center"
                        TextAlignment="Center" 
