@@ -42,26 +42,26 @@ namespace MindustryLauncher
             OpenServerWindowButton.Click += OpenServerWindow;
         }
 
-        private ServerManagementWindow? serverManagementWindow;
+        public ServerManagementWindow? ServerManagementWindow;
         private void OpenServerWindow(object? sender, RoutedEventArgs e)
         {
-            if (serverManagementWindow == null)
+            if (ServerManagementWindow == null)
             {
                 goto openServerManagementWindow;
             }
-            if (serverManagementWindow.Server == Data.SelectedInstance)
+            if (ServerManagementWindow.Server == Data.SelectedInstance)
             {
                 return;
             }
 
-            if (serverManagementWindow.Server != Data.SelectedInstance)
+            if (ServerManagementWindow.Server != Data.SelectedInstance)
             {
-                serverManagementWindow.Close();
+                ServerManagementWindow.Close();
             }
 
             openServerManagementWindow:
-            serverManagementWindow = new((ServerInstance) Data.SelectedInstance!);
-            serverManagementWindow.Show();
+            ServerManagementWindow = new((ServerInstance) Data.SelectedInstance!);
+            ServerManagementWindow.Show();
         }
 
         private void OpenMindustryFolder(object? sender, RoutedEventArgs e)
