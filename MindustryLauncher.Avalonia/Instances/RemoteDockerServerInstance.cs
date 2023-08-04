@@ -1,7 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Text;
 using System.Threading;
+using Newtonsoft.Json;
 using Renci.SshNet;
 
 namespace MindustryLauncher.Avalonia.Instances;
@@ -14,7 +14,9 @@ public class RemoteDockerServerInstance : ServerInstance
     public string ContainerName { get; set; }
 
     [NonSerialized]
+    [JsonIgnore]
     private SshClient? client;
+
     public RemoteDockerServerInstance()
     {
     }
@@ -22,58 +24,51 @@ public class RemoteDockerServerInstance : ServerInstance
     public override void Run()
     {
         client = new(Ip, Usernsame, Password);
-        
+
         client.Connect();
 
-        MemoryStream inputStream = new();
-        MemoryStream outputStream = new();
-        
-        
-        
-        
-        Shell shell = client.CreateShell(inputStream, outputStream, outputStream);
-        shell.Start();
+        client.RunCommand($"docker restart {ContainerName}");
+
+        var shell = this.client.CreateShellStream("", 0, 0, 0, 0, 4096);
         //Stream shell = client.CreateShellStream("bash", 80, 50, 1024, 1024, 1024);
 
-        Thread.Sleep(100);
-
-        ServerInput = new(inputStream, Encoding.UTF8);
-        ServerInput.AutoFlush = true;
-
-        ServerOutput = new(outputStream, Encoding.UTF8);
-        
-        /*
         ServerInput = new(shell, Encoding.UTF8);
         ServerInput.AutoFlush = true;
         ServerOutput = new(shell, Encoding.UTF8);
-        */
         
         ServerInput.Write((char)13);
-        Thread.Sleep(50);
-        
-        // attach the shell to the mindustry instance
-        ServerInput.WriteLine($"docker start {ContainerName}");
 
-        
-        Thread.Sleep(50);
-
-        
         ServerInput.WriteLine($"docker attach {ContainerName}");
-        
-        Thread.Sleep(50);
-        //while (ServerOutput.EndOfStream);
-        outputStream.Position = 0;
-        string firstOutput = ServerOutput.ReadLine()!;
+        Thread.Sleep(200);
+
+        string lastLine;
+        do
+        {
+            lastLine = ServerOutput.ReadLine()!;
+        } while (!ServerOutput.EndOfStream);
+
+        // This means that the server probably exited
+        if (lastLine.Contains($"{Usernsame}@"))
+        {
+            OnInstanceExited(1);
+            return;
+        }
         
         IsRunning = true;
+        OnInstanceStarted();
     }
 
     public override void Kill()
     {
         try
         {
-            ServerInput?.WriteLine("exit");
-            client?.Disconnect();
+            // stop the server
+            client!.RunCommand("save mindustryLauncherAutoSave");
+            client.RunCommand("stop");
+            client.RunCommand("exit");
+            client.Disconnect();
+            IsRunning = false;
+            OnInstanceExited(0);
         }
         catch (Exception)
         {
