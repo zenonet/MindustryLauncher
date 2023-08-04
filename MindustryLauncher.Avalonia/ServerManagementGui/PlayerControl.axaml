@@ -2,11 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="clr-namespace:MindustryLauncher.Avalonia.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="MindustryLauncher.Avalonia.ServerManagementGui.PlayerControl">
+             x:Class="MindustryLauncher.Avalonia.ServerManagementGui.PlayerControl"
+             x:DataType="models:PlayerModel">
     <DockPanel LastChildFill="False">
-        <TextBlock Name="PlayerNameTextBlock" DockPanel.Dock="Left" VerticalAlignment="Center" />
-        <Button Name="KickButton" VerticalAlignment="Center" DockPanel.Dock="Right">Kick</Button>
-        <Button Name="AdminButton" VerticalAlignment="Center" DockPanel.Dock="Right">Make Admin</Button>
-    </DockPanel>
+        <TextBlock Text="{Binding Name}" DockPanel.Dock="Left" VerticalAlignment="Center" />
+        <Button Command="{Binding KickCommand}" VerticalAlignment="Center" DockPanel.Dock="Right">Kick</Button>
+        <!--<Button Command="{Binding MakeAdminCommand}" VerticalAlignment="Center" DockPanel.Dock="Right">Make Admin</Button>
+  -->  </DockPanel>
 </UserControl>

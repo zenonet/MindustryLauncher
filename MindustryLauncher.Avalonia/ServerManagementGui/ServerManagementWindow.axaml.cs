@@ -46,11 +46,22 @@ public partial class ServerManagementWindow : Window
         ServerHandlerTask = Task.Run(ServerHandler);
     }
 
+    protected override void OnClosing(WindowClosingEventArgs e)
+    {
+        MainWindow.MainWindowInstance.ServerManagementWindow = null;
+    }
+
     private void SendConsoleCommand(object? sender, RoutedEventArgs e)
     {
-        try { EnsureServerIsRunning(); }
-        catch {return;}
-        
+        try
+        {
+            EnsureServerIsRunning();
+        }
+        catch
+        {
+            return;
+        }
+
 
         Server.ServerInput?.WriteLine(ConsoleInput.Text);
         ConsoleInput.Text = "";
@@ -58,6 +69,8 @@ public partial class ServerManagementWindow : Window
 
     private void EnsureServerIsRunning()
     {
+        if (Server.IsRunning)
+            return;
         IMsBox<ButtonResult>? confirmationBox = MessageBoxManager.GetMessageBoxStandard(new()
         {
             ButtonDefinitions = ButtonEnum.Ok,
@@ -67,6 +80,11 @@ public partial class ServerManagementWindow : Window
         });
         confirmationBox.ShowAsPopupAsync(this);
         throw new ServerNotRunningException();
+    }
+
+    private void SendPlayerCommand(string command)
+    {
+        Server.ServerInput!.WriteLine(command);
     }
 
     private void ServerHandler()
@@ -98,18 +116,29 @@ public partial class ServerManagementWindow : Window
             if (line == null)
                 continue;
 
+            // Remove weird color coding
+            line = new Regex("\u001b[[0-9]*m|\\/").Replace(line, "");
 
-            Match match = Regex.Match(line, "\\[.*\\] \\[I\\] (.*?) has connected\\. \\[(\\w*==)\\]");
+
+            Match match = Regex.Match(line, "\\[.*\\] \\[I\\] (.*?) has connected\\. \\[\\/?(\\w*==)\\]");
             if (match.Success)
             {
                 Match matchCopy = match;
-                Dispatcher.UIThread.InvokeAsync(() => { playerControls.Add(new(matchCopy.Groups[1].Value, matchCopy.Groups[2].Value)); });
+                Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    playerControls.Add(new(new()
+                    {
+                        Name = matchCopy.Groups[1].Value,
+                        Uuid = matchCopy.Groups[2].Value,
+                        SendCommand = SendPlayerCommand,
+                    }));
+                });
             }
 
-            match = Regex.Match(line, "\\[.*\\] \\[I\\] (.*?) has disconnected\\. \\[(\\w*==)\\].*");
+            match = Regex.Match(line, "\\[.*\\] \\[I\\] (.*?) has disconnected\\. \\[\\/?((?:\\w|\\/)*==)\\].*");
             if (match.Success)
             {
-                Dispatcher.UIThread.InvokeAsync(() => { playerControls.Remove(playerControls.First(x => x.Uuid == match.Groups[2].Value)); });
+                Dispatcher.UIThread.InvokeAsync(() => { playerControls.Remove(playerControls.First(x => x.Data.Uuid == match.Groups[2].Value)); });
             }
 
 
@@ -130,7 +159,12 @@ public partial class ServerManagementWindow : Window
             playerControls.Clear();
             foreach (Match match in matches)
             {
-                playerControls.Add(new(match.Groups[1].Value, match.Groups[2].Value));
+                playerControls.Add(new(new()
+                {
+                    Name = match.Groups[1].Value,
+                    Uuid = match.Groups[2].Value,
+                    SendCommand = SendPlayerCommand,
+                }));
             }
         });
     }
@@ -138,9 +172,15 @@ public partial class ServerManagementWindow : Window
 
     private void OnHostButtonClick(object? sender, RoutedEventArgs e)
     {
-        try { EnsureServerIsRunning(); }
-        catch {return;}        
-        
+        try
+        {
+            EnsureServerIsRunning();
+        }
+        catch
+        {
+            return;
+        }
+
         Server.ServerInput!.WriteLine("host");
     }
 

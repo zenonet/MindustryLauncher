@@ -1,18 +1,15 @@
 ﻿using Avalonia.Controls;
+using MindustryLauncher.Avalonia.Models;
 
 
 namespace MindustryLauncher.Avalonia.ServerManagementGui;
 
 public partial class PlayerControl : UserControl
 {
-    public string PlayerName { get; }
-    public string Uuid { get; }
-    
-    public PlayerControl(string playerName, string uuid)
+    public PlayerModel Data => (PlayerModel) DataContext!;
+    public PlayerControl(PlayerModel playerModel)
     {
-        PlayerName = playerName;
-        Uuid = uuid;
+        DataContext = playerModel;
         InitializeComponent();
-        PlayerNameTextBlock.Text = playerName;
     }
 }
