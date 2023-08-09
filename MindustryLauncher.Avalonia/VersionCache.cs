@@ -59,6 +59,7 @@ public static class VersionCache
                 break;
         }
 
+        Console.WriteLine($"Saving cache to {Path.GetFullPath(CachePath)}");
         StreamWriter sw = File.CreateText(CachePath);
         sw.Write(sb);
         sw.Close();
