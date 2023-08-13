@@ -41,14 +41,16 @@ public partial class NewServerInstanceWindow : Window
     
     private void OnRemoteDockerCreateButtonClicked(object? sender, RoutedEventArgs e)
     {
-        RemoteDockerServerInstance i = new();
+        RemoteDockerServerInstance i = new()
+        {
+            Name = RemoteDocker_InstanceName.Text ?? string.Empty,
+            Ip = RemoteDocker_SshIp.Text!,
+            Usernsame = RemoteDocker_SshUserName.Text!,
+            Password = RemoteDocker_SshPassword.Text!,
+            ContainerName = RemoteDocker_ContainerName.Text!,
+            Version = RemoteDocker_VersionDropDown.SelectedVersion!.Value,
+        };
 
-        i.Ip = RemoteDocker_SshIp.Text!;
-        i.Usernsame = RemoteDocker_SshUserName.Text!;
-        i.Password = RemoteDocker_SshPassword.Text!;
-        i.ContainerName = RemoteDocker_ContainerName.Text!;
-        i.Version = RemoteDocker_VersionDropDown.SelectedVersion!.Value;
-        
         DataManager.Data.Instances.Add(i);
         MainWindow.MainWindowInstance.UpdateInstanceList();
         this.Close();
