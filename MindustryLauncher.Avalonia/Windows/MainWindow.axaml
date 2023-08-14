@@ -11,77 +11,71 @@
     <Window.DataContext>
         <models:MainWindowViewModel />
     </Window.DataContext>
-    <Grid>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="7*" />
-            <ColumnDefinition Width="160" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="8*"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
-        </Grid.RowDefinitions>
-        <ListBox Name="InstanceList" />
-        <StackPanel Name="InstanceOptionsStackPanel" Grid.Column="1" Grid.Row="0" Orientation="Vertical"
-                    HorizontalAlignment="Center"
+    <DockPanel>
+        <StackPanel Name="InstanceOptionsStackPanel" Orientation="Vertical"
+                    DockPanel.Dock="Right"
                     IsEnabled="{Binding IsAnyInstanceSelected}">
             <StackPanel.Styles>
                 <Style Selector="Button">
                     <Setter Property="FontFamily" Value="Calibri" />
-                    <Setter Property="Margin" Value="10" />
+                    <Setter Property="Margin" Value="0 10 0 10" />
                     <Setter Property="HorizontalAlignment" Value="Center" />
                     <Setter Property="HorizontalContentAlignment" Value="Center" />
-                    <Setter Property="Width" Value="120" />
+                    <!--<Setter Property="Width" Value="120" />-->
                 </Style>
             </StackPanel.Styles>
             <Image Name="InstanceIconLarge" Height="100" Width="100"></Image>
             <TextBlock TextAlignment="Center" FontSize="15" Name="InstanceName" Text="{Binding SelectedInstance.Name}" />
             <TextBlock TextAlignment="Center" FontSize="12" Name="InstanceVersion"
                        Text="{Binding SelectedInstance.Version}" />
-            <Button Name="RunButton" Command="{Binding StartStopSelectedInstance}" Content="Run"/>
+            <Button Name="RunButton" Command="{Binding StartStopSelectedInstance}" Content="Run" />
             <Button Name="OpenMindustryFolderButton">Mindustry folder</Button>
             <Button Name="OpenServerWindowButton" IsVisible="False">Server Management</Button>
             <Button Name="DeleteInstanceButton" Command="{Binding SelectedInstance.DeleteInstance}">Delete</Button>
         </StackPanel>
 
-        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="1">
-            <Button Name="AddInstanceButton"
-                    Margin="10"
-                    Height="30"
-                    HorizontalAlignment="Left"
-                    HorizontalContentAlignment="Center">
-                Add Instance
-            </Button>
-            <Button Name="AddServerInstanceButton"
-                    Margin="10"
-                    Height="30"
-                    HorizontalAlignment="Left"
-                    HorizontalContentAlignment="Center">
-                Add Server Instance
-            </Button>
-        </StackPanel>
-        <StackPanel Grid.Column="0" Grid.Row="1" Orientation="Horizontal" FlowDirection="RightToLeft">
-            <Button
-                Content="{Binding LatestVersion}"
-                Command="{Binding UpdateLatestVersionInfo}"
-                Background="White">
-                <ToolTip.Tip>
-                    <TextBlock>
-                        Latest Version
-                        <LineBreak />
-                        Click to Update
-                    </TextBlock>
-                </ToolTip.Tip>
-            </Button>
+        <Panel DockPanel.Dock="Bottom">
+            <StackPanel Orientation="Horizontal">
+                <Button Name="AddInstanceButton"
+                        Margin="10"
+                        Height="30"
+                        HorizontalAlignment="Left"
+                        HorizontalContentAlignment="Center">
+                    Add Instance
+                </Button>
+                <Button Name="AddServerInstanceButton"
+                        Margin="10"
+                        Height="30"
+                        HorizontalAlignment="Left"
+                        HorizontalContentAlignment="Center">
+                    Add Server Instance
+                </Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
+                <Button
+                    Content="{Binding LatestVersion}"
+                    Command="{Binding UpdateLatestVersionInfo}"
+                    Background="White">
+                    <ToolTip.Tip>
+                        <TextBlock>
+                            Latest Version
+                            <LineBreak />
+                            Click to Update
+                        </TextBlock>
+                    </ToolTip.Tip>
+                </Button>
 
-<ProgressBar Value="{Binding ProgressValue}" IsVisible="{Binding ShowProgress}"
-             FlowDirection="LeftToRight"/>
-            <TextBlock Margin="10" HorizontalAlignment="Right"
-                       VerticalAlignment="Center"
-                       TextAlignment="Center" 
-                       FlowDirection="LeftToRight"
-                       Text="{Binding StatusText}" />
-        </StackPanel>
+                <ProgressBar Value="{Binding ProgressValue}" IsVisible="{Binding ShowProgress}"
+                             FlowDirection="LeftToRight" />
+                <TextBlock Margin="10" HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           TextAlignment="Center"
+                           FlowDirection="LeftToRight"
+                           Text="{Binding StatusText}" />
+            </StackPanel>
+        </Panel>
 
-    </Grid>
+        <ListBox Name="InstanceList" HorizontalAlignment="Stretch" />
+
+    </DockPanel>
 </Window>
