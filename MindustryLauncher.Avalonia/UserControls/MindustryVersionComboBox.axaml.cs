@@ -31,7 +31,7 @@ public partial class MindustryVersionComboBox : UserControl
 
     public void LoadVersions()
     {
-        VersionCache.CheckForNewVersions();
+        VersionCache.CacheVersions().Wait();
         Version[] versions = VersionCache.GetAllCachedVersions(); //MindustryDownloader.GetVersions(count);
 
         LoadFromVersionEnumerable(versions);

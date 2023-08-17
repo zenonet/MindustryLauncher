@@ -15,7 +15,7 @@ internal static class Program
         if (args.Length > 0 && args[0] == "-createVersionCache")
         {
             Console.WriteLine("Creating cache...");
-            VersionCache.CacheVersions();
+            VersionCache.CacheVersions().Wait();
             Console.WriteLine("Cache created!");
             return 0;
         }

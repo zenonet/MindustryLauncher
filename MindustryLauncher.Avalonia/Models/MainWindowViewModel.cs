@@ -50,7 +50,7 @@ public partial class MainWindowViewModel : ObservableObject
     {
         await Task.Run(() =>
         {
-            VersionCache.CheckForNewVersions();
+            VersionCache.CacheVersions().Wait();
             VersionCache.LoadVersions();
 
             OnPropertyChanged(nameof(LatestVersion));

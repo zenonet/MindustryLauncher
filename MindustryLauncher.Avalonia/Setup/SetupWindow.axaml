@@ -30,7 +30,7 @@
                     </TextBlock>
                 </StackPanel>
                 <StackPanel Name="VersionCachingPage">
-                    <TextBlock>
+                    <TextBlock Name="VersionCachingPageMessage">
                         Getting the list of all mindustry versions ...
                     </TextBlock>
                     <ProgressBar

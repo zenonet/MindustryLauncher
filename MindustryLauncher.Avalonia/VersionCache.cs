@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
+using Octokit;
 
 namespace MindustryLauncher.Avalonia;
 
@@ -10,58 +13,26 @@ public static class VersionCache
 
     public static Version[]? Versions { get; private set; }
 
-
-    public static void CheckForNewVersions()
+    public static async Task CacheVersions()
     {
-        Version[] latestVersions = MindustryDownloader.GetVersionPage();
-
-        Version latestCachedVersion = GetAllCachedVersions()[0];
-
-        Version latestVersion = latestVersions[0];
-
-        if (latestCachedVersion != latestVersion)
-        {
-            CacheVersions(latestCachedVersion);
-        }
-    }
-
-    public static void CacheVersions(Version? until = null, Action<Version[]>? onProgressChanged = null)
-    {
-        Version? after = null;
-
         StringBuilder sb = new();
 
-        while (true)
+        GitHubClient client = new(new ProductHeaderValue("MindustryLauncher"));
+        IReadOnlyList<RepositoryTag>? tags = await client.Repository.GetAllTags("Anuken", "Mindustry");
+
+        if(Version.Parse(tags[0].Name) == Versions?[0])
+            return;
+        
+        foreach (RepositoryTag tag in tags)
         {
-            Version[] versionsOnPage = MindustryDownloader.GetVersionPage(after);
-
-            if (versionsOnPage.Length == 0)
-                break;
-
-            after = versionsOnPage[^1];
-
-            onProgressChanged?.Invoke(versionsOnPage);
-
-            foreach (Version version in versionsOnPage)
-            {
-                if (version == until)
-                {
-                    break;
-                }
-
-                sb.Append(version.ToString());
-                sb.Append(';');
-            }
-
-            // If there are less than 10 versions on the page,
-            // we can assume that we have reached the end of the list
-            if (versionsOnPage.Length < 10)
-                break;
+            Version v = Version.Parse(tag.Name);
+            sb.Append(v);
+            sb.Append(';');
         }
 
         Console.WriteLine($"Saving cache to {Path.GetFullPath(CachePath)}");
         StreamWriter sw = File.CreateText(CachePath);
-        sw.Write(sb);
+        await sw.WriteAsync(sb);
         sw.Close();
     }
 
@@ -76,7 +47,7 @@ public static class VersionCache
     public static void LoadVersions()
     {
         if (!File.Exists(CachePath))
-            CacheVersions();
+            CacheVersions().Wait();
 
         string rawCache = File.ReadAllText(CachePath);
         string[] versionStrings = rawCache.Split(';', StringSplitOptions.RemoveEmptyEntries);

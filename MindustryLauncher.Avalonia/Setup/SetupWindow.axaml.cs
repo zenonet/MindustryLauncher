@@ -47,7 +47,7 @@ public partial class SetupWindow : Window
 
     private void OnNextPageButtonClicked(object? sender, RoutedEventArgs e)
     {
-        if (Carousel.SelectedItem == VersionCachingPage)
+        if (Carousel.SelectedItem == JavaSelectionPage)
         {
             OnFinishButtonClicked();
             return;
@@ -109,26 +109,17 @@ public partial class SetupWindow : Window
 
     private void StartCachingVersions()
     {
-        // Get version count to display progress
-        int totalVersionCount;
-        int gottenVersionCount = 0;
+        NextPageButton.IsEnabled = true;
 
-        void HandleProgressUpdateOnUiThread()
-        {
-            CachingProgressBar.Value = gottenVersionCount / (float) totalVersionCount * 100;
-
-            if (gottenVersionCount == totalVersionCount)
-                NextPageButton.IsEnabled = true;
-        }
-
+        return;
         Task.Run(() =>
         {
-            totalVersionCount = MindustryDownloader.GetVersionCount();
-            VersionCache.CacheVersions(onProgressChanged: versions =>
+            VersionCache.CacheVersions().Wait();
+            Dispatcher.UIThread.Invoke(() =>
             {
-                gottenVersionCount += versions.Length;
-
-                Dispatcher.UIThread.InvokeAsync(HandleProgressUpdateOnUiThread);
+                CachingProgressBar.Value = 100;
+                NextPageButton.IsEnabled = true;
+                VersionCachingPageMessage.Text += " Done!";
             });
         });
     }
