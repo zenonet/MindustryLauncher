@@ -1,6 +1,6 @@
 ﻿namespace MindustryLauncher.Avalonia;
 
-public interface IFolderOpenable
+public interface ILocalInstance
 {
     public string Path { get; }
 }

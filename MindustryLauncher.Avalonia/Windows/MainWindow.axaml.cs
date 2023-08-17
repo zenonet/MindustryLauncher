@@ -66,7 +66,7 @@ namespace MindustryLauncher
 
         private void OpenMindustryFolder(object? sender, RoutedEventArgs e)
         {
-            if (Data.SelectedInstance is not IFolderOpenable instance)
+            if (Data.SelectedInstance is not ILocalInstance instance)
                 return;
             
             string mindustryPath = Path.Join(instance.Path, "Mindustry");

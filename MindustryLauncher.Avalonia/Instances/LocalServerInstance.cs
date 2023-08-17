@@ -4,7 +4,7 @@ using System.IO;
 
 namespace MindustryLauncher.Avalonia.Instances;
 
-public class LocalServerInstance : ServerInstance, IFolderOpenable
+public class LocalServerInstance : ServerInstance, ILocalInstance
 {
     public string Path { get; set; }
 
