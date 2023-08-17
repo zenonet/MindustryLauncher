@@ -17,7 +17,7 @@ public class LocalServerInstance : ServerInstance, IFolderOpenable
     {
         ProcessStartInfo startInfo = new()
         {
-            FileName = "java",
+            FileName = DataManager.Data.JavaPath,
             Arguments = "-jar " + System.IO.Path.Join(Path, "mindustry-server.jar"),
             RedirectStandardOutput = true,
             RedirectStandardInput = true,

@@ -23,7 +23,7 @@ public class LocalClientInstance : Instance, IFolderOpenable
     {
         ProcessStartInfo startInfo = new()
         {
-            FileName = JavaPath,
+            FileName = DataManager.Data.JavaPath,
             Arguments = "-jar " + System.IO.Path.Join(Path, "mindustry.jar"),
             RedirectStandardOutput = true,
             CreateNoWindow = true,
