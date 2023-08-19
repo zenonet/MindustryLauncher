@@ -42,14 +42,19 @@ public static class VersionCache
 
     public static async Task CacheVersions()
     {
+        if (File.Exists(CachePath))
+        {
+            Release latest = await client.Repository.Release.GetLatest("Anuken", "Mindustry");
+            if (Version.Parse(latest.TagName) == GetAllCachedVersions()[0])
+                return;
+        }
+
         StringBuilder sb = new();
 
-        GitHubClient client = new(new ProductHeaderValue("MindustryLauncher"));
         IReadOnlyList<RepositoryTag>? tags = await client.Repository.GetAllTags("Anuken", "Mindustry");
-
-        if(Version.Parse(tags[0].Name) == Versions?[0])
+        if (Version.Parse(tags[0].Name) == Versions?[0])
             return;
-        
+
         foreach (RepositoryTag tag in tags)
         {
             Version v = Version.Parse(tag.Name);
