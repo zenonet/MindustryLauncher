@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Octokit;
+using Octokit.Internal;
 
 namespace MindustryLauncher.Avalonia;
 
@@ -12,6 +13,32 @@ public static class VersionCache
     public static string CachePath => Path.Join(Program.LauncherPath(), "versions.cache");
 
     public static Version[]? Versions { get; private set; }
+
+    private static GitHubClient client;
+
+    static VersionCache()
+    {
+        string tokenPath = Path.Join(Program.LauncherPath(), "githubToken.txt");
+
+        if (File.Exists(tokenPath))
+        {
+            client = new(new("MindustryLauncher"),
+                new InMemoryCredentialStore(new(File.ReadAllText(tokenPath)))
+            );
+            
+            try
+            {
+                // Test the login
+                client.Repository.Release.GetLatest("Anuken", "Mindustry").Wait();
+                return;
+            }
+            catch (Exception)
+            {
+            }
+        }
+        client = new(new ProductHeaderValue("MindustryLauncher"));
+
+    }
 
     public static async Task CacheVersions()
     {
