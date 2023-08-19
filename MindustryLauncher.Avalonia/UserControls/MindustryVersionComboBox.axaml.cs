@@ -29,9 +29,9 @@ public partial class MindustryVersionComboBox : UserControl
         VersionDropDown.ItemsSource = versionsInDropdown;
     }
 
-    public void LoadVersions()
+    public async void LoadVersions()
     {
-        VersionCache.CacheVersions().Wait();
+        await VersionCache.CacheVersions();
         Version[] versions = VersionCache.GetAllCachedVersions(); //MindustryDownloader.GetVersions(count);
 
         LoadFromVersionEnumerable(versions);

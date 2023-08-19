@@ -52,7 +52,6 @@ public partial class NewServerInstanceWindow : Window
         };
 
         DataManager.Data.Instances.Add(i);
-        MainWindow.MainWindowInstance.UpdateInstanceList();
         this.Close();
     }
 }

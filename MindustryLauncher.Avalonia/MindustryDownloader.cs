@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Net.Http.Handlers;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using MindustryLauncher.Avalonia;
 
 namespace MindustryLauncher;
@@ -30,7 +31,10 @@ public static class MindustryDownloader
 
     private static void OnDownloadProgressChanged(float progress)
     {
-        MainWindow.MainWindowInstance.Data.ProgressValue = progress;
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            MainWindow.MainWindowInstance.Data.ProgressValue = progress;
+        });
     }
 
     public static async Task<bool> DownloadVersion(string path, Version version, bool downloadServer = false)

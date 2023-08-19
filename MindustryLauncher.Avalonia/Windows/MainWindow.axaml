@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:models="clr-namespace:MindustryLauncher.Avalonia.Models"
+        xmlns:avalonia="clr-namespace:MindustryLauncher.Avalonia"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="MindustryLauncher.MainWindow"
         RequestedThemeVariant="Light"
@@ -29,7 +30,7 @@
             <Button Name="RunButton" Command="{Binding StartStopSelectedInstance}" Content="Run" />
             <Button Name="OpenMindustryFolderButton">Mindustry folder</Button>
             <Button Name="OpenServerWindowButton" IsVisible="False">Server Management</Button>
-            <Button Name="DeleteInstanceButton" Command="{Binding SelectedInstance.DeleteInstance}">Delete</Button>
+            <Button Name="DeleteInstanceButton">Delete</Button>
         </StackPanel>
 
         <Panel DockPanel.Dock="Bottom">
@@ -73,7 +74,13 @@
             </StackPanel>
         </Panel>
 
-        <ListBox Name="InstanceList" HorizontalAlignment="Stretch" SelectionMode="AlwaysSelected"/>
+        <ListBox Name="InstanceList" HorizontalAlignment="Stretch" SelectionMode="AlwaysSelected" SelectedItem="{Binding SelectedInstance}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="avalonia:Instance">
+                    <avalonia:InstanceListBoxItem Instance="{Binding}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
     </DockPanel>
 </Window>

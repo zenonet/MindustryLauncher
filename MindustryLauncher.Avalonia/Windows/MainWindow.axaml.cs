@@ -23,17 +23,16 @@ namespace MindustryLauncher
     {
         public static MainWindow MainWindowInstance = null!;
 
-        public ObservableCollection<InstanceListBoxItem> ListBoxItems { get; } = new();
-
         public MainWindowViewModel Data => (DataContext as MainWindowViewModel)!;
+
         public MainWindow()
         {
             MainWindowInstance = this;
             InitializeComponent();
             Data.UpdateLatestVersionInfo();
-            
-            UpdateInstanceList();
-            
+
+            InstanceList.ItemsSource = DataManager.Data.Instances;
+
             InstanceList.SelectionChanged += OnSelectionChanged;
             DeleteInstanceButton.Click += DeleteInstance;
             AddInstanceButton.Click += AddInstance;
@@ -43,12 +42,14 @@ namespace MindustryLauncher
         }
 
         public ServerManagementWindow? ServerManagementWindow;
+
         private void OpenServerWindow(object? sender, RoutedEventArgs e)
         {
             if (ServerManagementWindow == null)
             {
                 goto openServerManagementWindow;
             }
+
             if (ServerManagementWindow.Server == Data.SelectedInstance)
             {
                 return;
@@ -68,9 +69,9 @@ namespace MindustryLauncher
         {
             if (Data.SelectedInstance is not ILocalInstance instance)
                 return;
-            
+
             string mindustryPath = Path.Join(instance.Path, "Mindustry");
-            if(!Directory.Exists(mindustryPath))
+            if (!Directory.Exists(mindustryPath))
                 Directory.CreateDirectory(mindustryPath);
 
             using Process folderOpener = new();
@@ -78,6 +79,7 @@ namespace MindustryLauncher
             folderOpener.StartInfo.UseShellExecute = true;
             folderOpener.Start();
         }
+
         private void DeleteInstance(object? sender, RoutedEventArgs e)
         {
             // Buffer the selected instance in case another is selected
@@ -104,9 +106,7 @@ namespace MindustryLauncher
                     }
 
                     i.DeleteInstance();
-                    UpdateInstanceList();
                 });
-
             });
         }
 
@@ -120,35 +120,13 @@ namespace MindustryLauncher
             NewInstanceWindow window = new();
             window.Show();
         }
-        
+
         private void AddServerInstance(object? sender, RoutedEventArgs e)
         {
             NewServerInstanceWindow window = new();
             window.Show();
         }
 
-        public void UpdateInstanceList()
-        {
-            Dispatcher.UIThread.InvokeAsync(() =>
-            {
-                ListBoxItems.Clear();
-
-                if (Data.SelectedInstance != null && !DataManager.Data.Instances.Contains(Data.SelectedInstance))
-                    Data.SelectedInstance = null;
-
-                foreach (Instance i in DataManager.Data.Instances)
-                {
-                    InstanceListBoxItem listViewItem = new(i);
-                    ListBoxItems.Add(listViewItem);
-
-                    if (i == Data.SelectedInstance)
-                        InstanceList.SelectedItem = listViewItem;
-                }
-
-                InstanceList.ItemsSource = ListBoxItems;
-            });
-        }
-        
         private void OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
             SetRunButtonText();
@@ -158,11 +136,6 @@ namespace MindustryLauncher
                 Data.SelectedInstance.InstanceStarted -= SetStopButtonText;
                 Data.SelectedInstance.InstanceExited -= SetRunButtonText;
             }
-
-            
-            Data.SelectedInstance = ((InstanceListBoxItem) InstanceList.SelectedItem!).Instance;
-            //InstanceName.Text = Data.SelectedInstance.Name;
-            //InstanceVersion.Text = Data.SelectedInstance.Version.ToString();
 
             if (Data.SelectedInstance is LocalClientInstance instance)
             {
@@ -185,6 +158,7 @@ namespace MindustryLauncher
             }
 
             // Update the text on the run button according to the instances status
+            if (Data.SelectedInstance == null) return;
             Data.SelectedInstance.InstanceStarted += SetStopButtonText;
             Data.SelectedInstance.InstanceExited += SetRunButtonText;
 

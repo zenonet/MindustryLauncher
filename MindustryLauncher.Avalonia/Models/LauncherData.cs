@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace MindustryLauncher.Avalonia.Models;
 
@@ -14,6 +16,6 @@ public class LauncherData
         
     }
 
-    public List<Instance> Instances { get; set; }
+    public ObservableCollection<Instance> Instances { get; set; }
     public string JavaPath { get; set; }
 }
