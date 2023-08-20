@@ -75,7 +75,7 @@ public partial class ServerManagementWindow : Window
         {
             ButtonDefinitions = ButtonEnum.Ok,
             ContentTitle = "Server is not running",
-            ContentMessage = "You can't do that because shis server is not running.",
+            ContentMessage = "You can't do that because his server is not running.",
             Topmost = true,
         });
         confirmationBox.ShowAsPopupAsync(this);
