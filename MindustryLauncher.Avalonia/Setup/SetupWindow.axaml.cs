@@ -109,9 +109,7 @@ public partial class SetupWindow : Window
 
     private void StartCachingVersions()
     {
-        NextPageButton.IsEnabled = true;
 
-        return;
         Task.Run(() =>
         {
             VersionCache.CacheVersions().Wait();

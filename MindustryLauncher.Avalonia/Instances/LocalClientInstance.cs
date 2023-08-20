@@ -8,8 +8,11 @@ namespace MindustryLauncher;
 
 public class LocalClientInstance : Instance, ILocalInstance
 {
-
     public string Path { get; set; }
+    public string JarHash { get; set; }
+    
+    public string JarPath => System.IO.Path.Join(Path, "mindustry.jar");
+
     public static LocalClientInstance Parse(string json)
     {
         return JsonSerializer.Deserialize<LocalClientInstance>(json) ?? throw new InvalidOperationException("The provided json instance was invalid");
@@ -61,7 +64,6 @@ public class LocalClientInstance : Instance, ILocalInstance
     {
         Directory.Delete(Path, true);
         DataManager.Data.Instances.Remove(this);
-        MainWindow.MainWindowInstance.UpdateInstanceList();
     }
 
     private const string JavaPath = "java";

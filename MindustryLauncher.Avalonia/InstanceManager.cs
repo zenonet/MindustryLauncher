@@ -9,52 +9,66 @@ namespace MindustryLauncher;
 
 public static class InstanceManager
 {
-    
     public static string GetDataPath() => $"{Program.LauncherPath()}/mindustrylauncher.json";
-    
+
     public static void CreateInstance(string instanceName, Version version)
     {
         string instancePath = Path.Join(Program.LauncherPath(), "instances", instanceName);
         Directory.CreateDirectory(instancePath);
-        MindustryDownloader.DownloadVersion(Path.Join(instancePath, "mindustry.jar"), version).ContinueWith(downloadTask =>
+        string jarPath = Path.Join(instancePath, "mindustry.jar");
+
+        Task.Run(async () =>
         {
-            if (downloadTask.Result)
+            bool success = await MindustryDownloader.DownloadVersion(jarPath, version);
+            if (success)
                 ExtractIcon(instancePath);
-            // Hand over the result of the download task to the next task
-            return downloadTask.Result;
-        }).ContinueWith(OnInstanceDownloaded);
-        
+            OnInstanceDownloaded(success);
+
+            LocalClientInstance instance = new()
+            {
+                Name = instanceName,
+                Version = version,
+                Path = instancePath,
+                JarHash = Utils.GetSha256OfFile(jarPath),
+            };
+
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                DataManager.Data.Instances.Add(instance);
+                DataManager.Save();
+            });
+        });
+
         Dispatcher.UIThread.InvokeAsync(() => MainWindow.MainWindowInstance.Data.StatusText = $"Downloading mindustry v{version}...");
-
-        LocalClientInstance instance = new()
-        {
-            Name = instanceName,
-            Version = version,
-            Path = instancePath,
-        };
-
-        DataManager.Data.Instances.Add(instance);
-        DataManager.Save();
     }
 
     public static void CreateLocalServerInstance(string instanceName, Version version)
     {
         string instancePath = Path.Join(Program.LauncherPath(), "instances", instanceName);
         Directory.CreateDirectory(instancePath);
-        MindustryDownloader.DownloadVersion(Path.Join(instancePath, "mindustry-server.jar"), version, true).ContinueWith(OnInstanceDownloaded);
+        string jarPath = Path.Join(instancePath, "mindustry-server.jar");
+        Task.Run(async () =>
+        {
+            bool success = await MindustryDownloader.DownloadVersion(jarPath, version, true);
+            OnInstanceDownloaded(success);
+
+            LocalServerInstance instance = new()
+            {
+                Name = instanceName,
+                Version = version,
+                Path = instancePath,
+                JarHash = Utils.GetSha256OfFile(jarPath),
+            };
+
+            Dispatcher.UIThread.Invoke(() =>
+            {
+                DataManager.Data.Instances.Add(instance);
+                DataManager.Save();
+            });
+        });
 
 
         Dispatcher.UIThread.InvokeAsync(() => MainWindow.MainWindowInstance.Data.StatusText = $"Downloading mindustry server v{version}...");
-
-        LocalServerInstance instance = new()
-        {
-            Name = instanceName,
-            Version = version,
-            Path = instancePath,
-        };
-
-        DataManager.Data.Instances.Add(instance);
-        DataManager.Save();
     }
 
     private static void ExtractIcon(string instancePath)
@@ -82,11 +96,9 @@ public static class InstanceManager
         }
     }
 
-    private static void OnInstanceDownloaded(Task<bool> task)
+    private static void OnInstanceDownloaded(bool success)
     {
-        bool success = task.Result;
         Dispatcher.UIThread.InvokeAsync(() => MainWindow.MainWindowInstance.Data.StatusText = "");
-        MainWindow.MainWindowInstance.UpdateInstanceList();
     }
 }
 

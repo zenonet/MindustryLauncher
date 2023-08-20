@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Avalonia;
 using MindustryLauncher.Avalonia.Models;
+using MindustryLauncher.Avalonia.Windows;
 using Newtonsoft.Json;
 
 namespace MindustryLauncher.Avalonia;
@@ -38,5 +41,17 @@ public static class DataManager
         {
             TypeNameHandling = TypeNameHandling.Auto,
         }) ?? LauncherData.CreateDefault();
+
+        IEnumerable<Instance> compromisedInstances = from instance in Data.Instances
+            where instance is ILocalInstance
+            where !((ILocalInstance) instance).VerifyIntegrity()
+            select instance;
+
+        List<Instance> compromisedInstancesList = compromisedInstances.ToList();
+        if (compromisedInstancesList.Any())
+        {
+            InstanceCompromisedWindow compromisedWindow = new(new(compromisedInstancesList.ToList()));
+            compromisedWindow.Show();
+        }
     }
 }

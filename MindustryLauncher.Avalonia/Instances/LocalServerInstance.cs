@@ -7,6 +7,8 @@ namespace MindustryLauncher.Avalonia.Instances;
 public class LocalServerInstance : ServerInstance, ILocalInstance
 {
     public string Path { get; set; }
+    public string JarHash { get; set; }
+    public string JarPath => System.IO.Path.Join(Path, "mindustry-server.jar");
 
     [NonSerialized] public Process? Process;
 
@@ -61,6 +63,5 @@ public class LocalServerInstance : ServerInstance, ILocalInstance
     {
         Directory.Delete(Path, true);
         DataManager.Data.Instances.Remove(this);
-        MainWindow.MainWindowInstance.UpdateInstanceList();
     }
 }
