@@ -8,7 +8,7 @@
              x:DataType="models:PlayerModel">
     <DockPanel LastChildFill="False">
         <TextBlock Text="{Binding Name}" DockPanel.Dock="Left" VerticalAlignment="Center" />
-        <Button Command="{Binding KickCommand}" VerticalAlignment="Center" DockPanel.Dock="Right">Kick</Button>
+        <Button Command="{Binding Kick}" VerticalAlignment="Center" DockPanel.Dock="Right">Kick</Button>
         <!--<Button Command="{Binding MakeAdminCommand}" VerticalAlignment="Center" DockPanel.Dock="Right">Make Admin</Button>
   -->  </DockPanel>
 </UserControl>
