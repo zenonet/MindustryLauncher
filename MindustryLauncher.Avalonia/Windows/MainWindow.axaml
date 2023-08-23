@@ -27,7 +27,7 @@
             <TextBlock TextAlignment="Center" FontSize="15" Name="InstanceName" Text="{Binding SelectedInstance.Name}" />
             <TextBlock TextAlignment="Center" FontSize="12" Name="InstanceVersion"
                        Text="{Binding SelectedInstance.Version}" />
-            <Button Name="RunButton" Command="{Binding StartStopSelectedInstance}" Content="Run" />
+            <Button Name="RunButton" Command="{Binding StartStopSelectedInstance}" Content="{Binding RunStopButtonText}" />
             <Button Name="OpenMindustryFolderButton">Mindustry folder</Button>
             <Button Name="OpenServerWindowButton" IsVisible="False">Server Management</Button>
             <Button Name="DeleteInstanceButton">Delete</Button>

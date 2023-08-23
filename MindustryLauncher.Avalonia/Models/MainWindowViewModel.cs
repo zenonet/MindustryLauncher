@@ -1,6 +1,5 @@
-﻿using System.Runtime.InteropServices.JavaScript;
+﻿using System;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -15,14 +14,14 @@ public partial class MainWindowViewModel : ObservableObject
 
     public Version LatestVersion => VersionCache.Versions[0];
     public bool IsAnyInstanceSelected => SelectedInstance != null;
-    
+
     [ObservableProperty]
     private string statusText = "";
-    
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(ShowProgress))]
     private float progressValue;
-    
+
     public bool ShowProgress => ProgressValue is > 0 and < 100;
 
     public string RunStopButtonText
@@ -55,5 +54,31 @@ public partial class MainWindowViewModel : ObservableObject
 
             OnPropertyChanged(nameof(LatestVersion));
         });
+    }
+
+    
+    partial void OnSelectedInstanceChanging(Instance? value)
+    {
+        void OnInstanceExited(object? sender, int i)
+        {
+            OnPropertyChanged(nameof(RunStopButtonText));
+        }
+
+        void OnInstanceStarted(object? sender, EventArgs eventArgs)
+        {
+            OnPropertyChanged(nameof(RunStopButtonText));
+        }
+
+        if (selectedInstance != null)
+        {
+            selectedInstance.InstanceStarted -= OnInstanceStarted;
+            selectedInstance.InstanceExited -= OnInstanceExited;
+        }
+
+        if (value != null)
+        {
+            value.InstanceStarted += OnInstanceStarted;
+            value.InstanceExited += OnInstanceExited;
+        }
     }
 }
