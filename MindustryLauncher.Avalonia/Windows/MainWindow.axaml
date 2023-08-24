@@ -29,7 +29,7 @@
                        Text="{Binding SelectedInstance.Version}" />
             <Button Name="RunButton" Command="{Binding StartStopSelectedInstance}" Content="{Binding RunStopButtonText}" />
             <Button Name="OpenMindustryFolderButton">Mindustry folder</Button>
-            <Button Name="OpenServerWindowButton" IsVisible="False">Server Management</Button>
+            <Button Name="OpenServerWindowButton" IsVisible="{Binding IsSelectedInstanceServer}">Server Management</Button>
             <Button Name="DeleteInstanceButton">Delete</Button>
         </StackPanel>
 

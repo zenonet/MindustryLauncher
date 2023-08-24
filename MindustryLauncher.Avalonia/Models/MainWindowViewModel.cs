@@ -10,6 +10,7 @@ public partial class MainWindowViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsAnyInstanceSelected))]
     [NotifyPropertyChangedFor(nameof(RunStopButtonText))]
+    [NotifyPropertyChangedFor(nameof(IsSelectedInstanceServer))]
     private Instance? selectedInstance;
 
     public Version LatestVersion => VersionCache.Versions[0];
@@ -33,6 +34,8 @@ public partial class MainWindowViewModel : ObservableObject
             return "Stop";
         }
     }
+    
+    public bool IsSelectedInstanceServer => SelectedInstance is ServerInstance;
 
     [RelayCommand]
     public void StartStopSelectedInstance()

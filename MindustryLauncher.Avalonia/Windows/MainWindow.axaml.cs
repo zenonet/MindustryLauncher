@@ -129,14 +129,6 @@ namespace MindustryLauncher
 
         private void OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
         {
-            SetRunButtonText();
-
-            if (Data.SelectedInstance != null)
-            {
-                Data.SelectedInstance.InstanceStarted -= SetStopButtonText;
-                Data.SelectedInstance.InstanceExited -= SetRunButtonText;
-            }
-
             if (Data.SelectedInstance is LocalClientInstance instance)
             {
                 try
@@ -147,25 +139,14 @@ namespace MindustryLauncher
                 {
                     InstanceIconLarge.Source = null;
                 }
+                return;
             }
-            else
+
+            // Clear the icon if there is no icon for this instance
+            if (InstanceIconLarge.Source is Bitmap b)
             {
-                // Clear the icon if there is no icon for this instance
-                if (InstanceIconLarge.Source is Bitmap b)
-                {
-                    b.Dispose();
-                }
+                b.Dispose();
             }
-
-            // Update the text on the run button according to the instances status
-            if (Data.SelectedInstance == null) return;
-            Data.SelectedInstance.InstanceStarted += SetStopButtonText;
-            Data.SelectedInstance.InstanceExited += SetRunButtonText;
-
-            if (Data.SelectedInstance.IsRunning)
-                SetStopButtonText();
-
-            OpenServerWindowButton.IsVisible = Data.SelectedInstance is ServerInstance;
         }
 
         private void SetRunButtonText(object? sender = null, int _2 = 0)
