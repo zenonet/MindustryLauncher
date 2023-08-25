@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
+using Avalonia.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -11,6 +13,7 @@ public partial class MainWindowViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsAnyInstanceSelected))]
     [NotifyPropertyChangedFor(nameof(RunStopButtonText))]
     [NotifyPropertyChangedFor(nameof(IsSelectedInstanceServer))]
+    [NotifyPropertyChangedFor(nameof(InstanceIcon))]
     private Instance? selectedInstance;
 
     public Version LatestVersion => VersionCache.Versions[0];
@@ -36,6 +39,7 @@ public partial class MainWindowViewModel : ObservableObject
     }
     
     public bool IsSelectedInstanceServer => SelectedInstance is ServerInstance;
+    public Bitmap? InstanceIcon => SelectedInstance is LocalClientInstance ? new Bitmap(Path.Join(((ILocalInstance)SelectedInstance).Path, "icon.ico")) : null;
 
     [RelayCommand]
     public void StartStopSelectedInstance()
@@ -83,5 +87,7 @@ public partial class MainWindowViewModel : ObservableObject
             value.InstanceStarted += OnInstanceStarted;
             value.InstanceExited += OnInstanceExited;
         }
+        
+        
     }
 }

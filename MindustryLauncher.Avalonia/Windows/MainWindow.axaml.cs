@@ -33,7 +33,6 @@ namespace MindustryLauncher
 
             InstanceList.ItemsSource = DataManager.Data.Instances;
 
-            InstanceList.SelectionChanged += OnSelectionChanged;
             DeleteInstanceButton.Click += DeleteInstance;
             AddInstanceButton.Click += AddInstance;
             AddServerInstanceButton.Click += AddServerInstance;
@@ -99,12 +98,6 @@ namespace MindustryLauncher
                     if (result.Result != ButtonResult.Ok)
                         return;
 
-                    if (Data.SelectedInstance == i && InstanceIconLarge.Source is Bitmap b)
-                    {
-                        // Allow deletion of the instance by closing the icon
-                        b.Dispose();
-                    }
-
                     i.DeleteInstance();
                 });
             });
@@ -125,28 +118,6 @@ namespace MindustryLauncher
         {
             NewServerInstanceWindow window = new();
             window.Show();
-        }
-
-        private void OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
-        {
-            if (Data.SelectedInstance is LocalClientInstance instance)
-            {
-                try
-                {
-                    InstanceIconLarge.Source = new Bitmap(Path.Join(instance.Path, "icon.ico"));
-                }
-                catch
-                {
-                    InstanceIconLarge.Source = null;
-                }
-                return;
-            }
-
-            // Clear the icon if there is no icon for this instance
-            if (InstanceIconLarge.Source is Bitmap b)
-            {
-                b.Dispose();
-            }
         }
 
         private void SetRunButtonText(object? sender = null, int _2 = 0)

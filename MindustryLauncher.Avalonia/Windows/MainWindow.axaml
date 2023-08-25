@@ -23,7 +23,7 @@
                     <!--<Setter Property="Width" Value="120" />-->
                 </Style>
             </StackPanel.Styles>
-            <Image Name="InstanceIconLarge" Height="100" Width="100"></Image>
+            <Image Source="{Binding InstanceIcon}" Height="100" Width="100"></Image>
             <TextBlock TextAlignment="Center" FontSize="15" Name="InstanceName" Text="{Binding SelectedInstance.Name}" />
             <TextBlock TextAlignment="Center" FontSize="12" Name="InstanceVersion"
                        Text="{Binding SelectedInstance.Version}" />
