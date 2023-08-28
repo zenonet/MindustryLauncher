@@ -1,6 +1,8 @@
 ﻿using Avalonia;
 using System;
 using System.IO;
+using Octokit;
+using Octokit.Internal;
 
 namespace MindustryLauncher.Avalonia;
 
@@ -33,6 +35,31 @@ internal static class Program
     private static bool launcherPathChecked = false;
 
     private const string launcherPath = "MindustryLauncher";
+    
+    public static Lazy<GitHubClient> GitHubClientLazy { get; } = new(() =>
+    {
+        string tokenPath = Path.Join(Program.LauncherPath(), "githubToken.txt");
+
+        if (File.Exists(tokenPath))
+        {
+            GitHubClient client = new(new("MindustryLauncher"),
+                new InMemoryCredentialStore(new(File.ReadAllText(tokenPath)))
+            );
+
+            try
+            {
+                // Test the login
+                client.Repository.Release.GetLatest("Anuken", "Mindustry").Wait();
+                return client;
+            }
+            catch (Exception)
+            {
+            }
+        }
+        return new(new ProductHeaderValue("MindustryLauncher"));
+    });
+    
+    public static GitHubClient GitHubClient => GitHubClientLazy.Value;
 
     public static string LauncherPath()
     {

@@ -14,44 +14,18 @@ public static class VersionCache
 
     public static Version[]? Versions { get; private set; }
 
-    private static GitHubClient client;
-
-    static VersionCache()
-    {
-        string tokenPath = Path.Join(Program.LauncherPath(), "githubToken.txt");
-
-        if (File.Exists(tokenPath))
-        {
-            client = new(new("MindustryLauncher"),
-                new InMemoryCredentialStore(new(File.ReadAllText(tokenPath)))
-            );
-            
-            try
-            {
-                // Test the login
-                client.Repository.Release.GetLatest("Anuken", "Mindustry").Wait();
-                return;
-            }
-            catch (Exception)
-            {
-            }
-        }
-        client = new(new ProductHeaderValue("MindustryLauncher"));
-
-    }
-
     public static async Task CacheVersions()
     {
         if (File.Exists(CachePath))
         {
-            Release latest = await client.Repository.Release.GetLatest("Anuken", "Mindustry");
+            Release latest = await Program.GitHubClient.Repository.Release.GetLatest("Anuken", "Mindustry");
             if (Version.Parse(latest.TagName) == GetAllCachedVersions()[0])
                 return;
         }
 
         StringBuilder sb = new();
 
-        IReadOnlyList<RepositoryTag>? tags = await client.Repository.GetAllTags("Anuken", "Mindustry");
+        IReadOnlyList<RepositoryTag>? tags = await Program.GitHubClient.Repository.GetAllTags("Anuken", "Mindustry");
         if (Version.Parse(tags[0].Name) == Versions?[0])
             return;
 
