@@ -10,13 +10,13 @@ namespace MindustryLauncher.Avalonia;
 
 public static class DataManager
 {
-    public static LauncherData Data => Application.Current.DataContext as LauncherData;
+    public static LauncherData Data => (Application.Current!.DataContext as LauncherData)!;
 
     public static string GetDataPath() => $"{Program.LauncherPath()}/mindustrylauncher.json";
 
     public static void Save()
     {
-        string dataString = JsonConvert.SerializeObject(App.Current.DataContext,
+        string dataString = JsonConvert.SerializeObject(Application.Current!.DataContext,
             Formatting.Indented,
             new JsonSerializerSettings
             {
@@ -32,12 +32,12 @@ public static class DataManager
     {
         if (!File.Exists(GetDataPath()))
         {
-            App.Current.DataContext = LauncherData.CreateDefault();
+            Application.Current!.DataContext = LauncherData.CreateDefault();
             return;
         }
 
         string text = File.ReadAllText(GetDataPath());
-        App.Current.DataContext = JsonConvert.DeserializeObject<LauncherData>(text, new JsonSerializerSettings
+        Application.Current!.DataContext = JsonConvert.DeserializeObject<LauncherData>(text, new JsonSerializerSettings
         {
             TypeNameHandling = TypeNameHandling.Auto,
         }) ?? LauncherData.CreateDefault();
