@@ -75,20 +75,19 @@ public static class InstanceManager
     {
         try
         {
+            void Extract(ZipArchiveEntry entry)
+            {
+                entry.ExtractToFile(Path.Join(instancePath, entry.Name));
+            }
+            
             using ZipArchive archive = ZipFile.OpenRead(Path.Join(instancePath, "mindustry.jar"));
 
-            ZipArchiveEntry? entry;
-            entry = archive.GetEntry("icons/icon.ico")!;
+            ZipArchiveEntry? entry = archive.GetEntry("icons/icon.ico");
             if (entry != null)
-                goto extraction;
+                Extract(entry);
             entry = archive.GetEntry("sprites/icon.png");
             if (entry != null)
-                goto extraction;
-
-            return;
-
-            extraction:
-            entry.ExtractToFile(Path.Join(instancePath, entry.Name));
+                Extract(entry);
         }
         catch
         {
