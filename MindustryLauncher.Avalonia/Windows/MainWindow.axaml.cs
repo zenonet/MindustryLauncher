@@ -44,22 +44,10 @@ namespace MindustryLauncher
 
         private void OpenServerWindow(object? sender, RoutedEventArgs e)
         {
-            if (ServerManagementWindow == null)
-            {
-                goto openServerManagementWindow;
-            }
+            if (ServerManagementWindow?.Server == Data.SelectedInstance) return;
 
-            if (ServerManagementWindow.Server == Data.SelectedInstance)
-            {
-                return;
-            }
+            ServerManagementWindow?.Close();
 
-            if (ServerManagementWindow.Server != Data.SelectedInstance)
-            {
-                ServerManagementWindow.Close();
-            }
-
-            openServerManagementWindow:
             ServerManagementWindow = new((ServerInstance) Data.SelectedInstance!);
             ServerManagementWindow.Show();
         }
