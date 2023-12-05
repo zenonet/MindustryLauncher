@@ -76,7 +76,7 @@ namespace MindustryLauncher
             {
                 ButtonDefinitions = ButtonEnum.OkCancel,
                 ContentTitle = "Are you sure?",
-                ContentMessage = $"This will delete the instance {Data.SelectedInstance!.Name} and all its files.\nThis action is not undoable",
+                ContentMessage = $"This will delete the instance {Data.SelectedInstance!.Name} and all its files.\nThis action is irreversible",
                 Topmost = true,
             });
             confirmationBox.ShowWindowAsync().ContinueWith(result =>
