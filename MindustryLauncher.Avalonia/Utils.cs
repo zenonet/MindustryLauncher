@@ -51,11 +51,4 @@ public static class Utils
         using FileStream fileStream = File.OpenRead(path);
         return Convert.ToBase64String(sha256.ComputeHash(fileStream));
     }
-
-    public static bool VerifyIntegrity(this ILocalInstance instance)
-    {
-        string jarPath = instance.JarPath;
-        string jarHash = GetSha256OfFile(jarPath);
-        return jarHash == instance.JarHash;
-    }
 }
