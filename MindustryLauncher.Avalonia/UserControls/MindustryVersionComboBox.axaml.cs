@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 
 namespace MindustryLauncher.Avalonia.UserControls;
 
@@ -27,6 +25,7 @@ public partial class MindustryVersionComboBox : UserControl
     private void Init()
     {
         VersionDropDown.ItemsSource = versionsInDropdown;
+        VersionDropDown.SelectedIndex = 0;
     }
 
     public async void LoadVersions()
