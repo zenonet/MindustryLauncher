@@ -8,7 +8,7 @@
         x:Class="MindustryLauncher.MainWindow"
         RequestedThemeVariant="Light"
         x:DataType="models:MainWindowViewModel"
-        Title="MindustryLauncher.Avalonia">
+        Title="Mindustry Launcher">
     <Window.DataContext>
         <models:MainWindowViewModel />
     </Window.DataContext>
@@ -48,6 +48,9 @@
                 <Button Name="AddServerInstanceButton">
                     Add Server Instance
                 </Button>
+                <!--<Button IsVisible="{Binding !IsLauncherLatest}">
+                    Update Launcher
+                </Button>-->
             </StackPanel>
             <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft">
                 <Button
