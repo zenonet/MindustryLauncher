@@ -11,20 +11,17 @@
     <Grid>
         <Grid.Styles>
             <Style Selector="Button">
-                <Setter Property="FontFamily" Value="Calibri" />
                 <Setter Property="Margin" Value="0, 20, 0, 0" />
                 <Setter Property="HorizontalAlignment" Value="Left"/>
                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
                 <Setter Property="Width" Value="120"/>
             </Style>
             <Style Selector="TextBox">
-                <Setter Property="FontFamily" Value="Calibri" />
                 <Setter Property="HorizontalAlignment" Value="Left"/>
                 <Setter Property="Width" Value="200"/>
                 <Setter Property="Height" Value="20"/>
             </Style>
             <Style Selector="Label">
-                <Setter Property="FontFamily" Value="Calibri" />
                 <Setter Property="Margin" Value="0, 20, 0, 0" />
                 <Setter Property="HorizontalAlignment" Value="Left"/>
                 <Setter Property="Width" Value="120"/>
