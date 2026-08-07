@@ -35,7 +35,6 @@ public class LocalServerInstance : ServerInstance, ILocalInstance
 
         process.EnableRaisingEvents = true;
 
-        IsRunning = true;
         Process = process;
 
         process.Exited += (_, _) =>
@@ -52,6 +51,7 @@ public class LocalServerInstance : ServerInstance, ILocalInstance
 
         ServerInput = Process.StandardInput;
         ServerOutput = Process.StandardOutput;
+        IsRunning = true;
     }
 
     public override void Kill()

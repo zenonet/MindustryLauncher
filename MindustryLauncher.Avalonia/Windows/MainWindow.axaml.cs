@@ -1,18 +1,15 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Media.Imaging;
 using Avalonia.Threading;
-using MessageBox.Avalonia.Enums;
+using MsBox.Avalonia.Enums;
 using MindustryLauncher.Avalonia;
 using MindustryLauncher.Avalonia.Models;
 using MindustryLauncher.Avalonia.Windows;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Base;
-using MsBox.Avalonia.Enums;
 
 namespace MindustryLauncher
 {

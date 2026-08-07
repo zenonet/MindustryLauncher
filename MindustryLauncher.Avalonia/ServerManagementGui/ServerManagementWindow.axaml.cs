@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Reactive.Linq;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using MessageBox.Avalonia.Enums;
+using MindustryLauncher.Avalonia.Models;
+using MsBox.Avalonia.Enums;
 using MindustryLauncher.Avalonia.ServerManagementGui;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Base;
-using MsBox.Avalonia.Enums;
 
 namespace MindustryLauncher.Avalonia.Windows;
 
@@ -25,6 +24,7 @@ public partial class ServerManagementWindow : Window
     private Task ServerHandlerTask;
 
     private ObservableCollection<PlayerControl> playerControls = new();
+    private CancellationTokenSource cts = new();
 
     public ServerManagementWindow(ServerInstance server)
     {
@@ -43,11 +43,22 @@ public partial class ServerManagementWindow : Window
         HostButton.Click += OnHostButtonClick;
         ConsoleSendButton.Click += SendConsoleCommand;
 
-        ServerHandlerTask = Task.Run(ServerHandler);
+        ServerHandlerTask = Task.Run(async () =>
+        {
+            try
+            {
+                await ServerHandler(cts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                return;
+            }
+        });
     }
 
     protected override void OnClosing(WindowClosingEventArgs e)
     {
+        cts.Cancel(false);
         MainWindow.MainWindowInstance.ServerManagementWindow = null;
     }
 
@@ -86,12 +97,16 @@ public partial class ServerManagementWindow : Window
     {
         Server.ServerInput!.WriteLine(command);
     }
-
-    private void ServerHandler()
+    
+    
+    
+    private async Task ServerHandler(CancellationToken ct)
     {
         Stopwatch sw = Stopwatch.StartNew();
-        while (true)
+        while (!ct.IsCancellationRequested)
         {
+            await Task.Delay(50, ct);
+
             if (!Server.IsRunning)
                 continue;
 
@@ -112,7 +127,7 @@ public partial class ServerManagementWindow : Window
                 GeneratePlayerList(rawPlayerList);
             }*/
 
-            string? line = Server.ServerOutput!.ReadLine();
+            string? line = await Server.ServerOutput!.ReadLineAsync(ct);
             if (line == null)
                 continue;
 
@@ -124,21 +139,28 @@ public partial class ServerManagementWindow : Window
             if (match.Success)
             {
                 Match matchCopy = match;
-                Dispatcher.UIThread.InvokeAsync(() =>
+
+                var model = new PlayerModel()
                 {
-                    playerControls.Add(new(new()
-                    {
-                        Name = matchCopy.Groups[1].Value,
-                        Uuid = matchCopy.Groups[2].Value,
-                        SendCommand = SendPlayerCommand,
-                    }));
+                    Name = matchCopy.Groups[1].Value,
+                    Uuid = matchCopy.Groups[2].Value,
+                    SendCommand = SendPlayerCommand,
+                };
+                Dispatcher.UIThread.Post(() =>
+                {
+                    var control = new PlayerControl();
+                    control.DataContext = model;
+                    playerControls.Add(control);
                 });
             }
 
             match = Regex.Match(line, "\\[.*\\] \\[I\\] (.*?) has disconnected\\. \\[\\/?((?:\\w|\\/)*==)\\].*");
             if (match.Success)
             {
-                Dispatcher.UIThread.InvokeAsync(() => { playerControls.Remove(playerControls.First(x => x.Data.Uuid == match.Groups[2].Value)); });
+                Dispatcher.UIThread.Post(() =>
+                {
+                    playerControls.Remove(playerControls.First(x => x.Data.Uuid == match.Groups[2].Value));
+                });
             }
 
 
@@ -159,12 +181,15 @@ public partial class ServerManagementWindow : Window
             playerControls.Clear();
             foreach (Match match in matches)
             {
-                playerControls.Add(new(new()
+                playerControls.Add(new()
                 {
-                    Name = match.Groups[1].Value,
-                    Uuid = match.Groups[2].Value,
-                    SendCommand = SendPlayerCommand,
-                }));
+                    DataContext = new PlayerModel()
+                    {
+                        Name = match.Groups[1].Value,
+                        Uuid = match.Groups[2].Value,
+                        SendCommand = SendPlayerCommand,
+                    }
+                });
             }
         });
     }

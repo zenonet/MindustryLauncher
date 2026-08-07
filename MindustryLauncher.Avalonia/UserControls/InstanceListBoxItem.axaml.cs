@@ -23,7 +23,7 @@ public partial class InstanceListBoxItem : UserControl
     {
         InitializeComponent();
         
-        InstanceProperty.Changed.Subscribe(args =>
+        InstanceProperty.Changed.Subscribe(new Observer<AvaloniaPropertyChangedEventArgs<Instance?>>(args =>
         {
             if (args.OldValue.Value != null)
             {
@@ -32,7 +32,7 @@ public partial class InstanceListBoxItem : UserControl
             }
 
             Init();
-        });
+        }));
     }
 
     public InstanceListBoxItem(Instance instance)
